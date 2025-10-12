@@ -1,0 +1,50 @@
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage{geometry}
+\usepackage{pdfpages}
+\usepackage{titlesec}
+\usepackage{xcolor}
+\geometry{a4paper, margin=1in}
+\usepackage{fancyhdr}
+
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{Declaratieformulier}
+\lhead{\textbf{Stichting Trapperskamp Vught - Luxemburgse Ardennen}}
+\cfoot{\thepage}
+
+\titleformat{\section}{\large\bfseries\color{blue}}{}{0em}{}
+
+\begin{document}
+
+\begin{center}
+    {\LARGE\bfseries Declaratieformulier}\\[10pt]
+    \hrulefill
+\end{center}
+
+\vspace{10pt}
+
+\begin{tabular}{p{4cm} p{10cm}}
+\textbf{Naam:} & {{ name }} \\
+\textbf{IBAN:} & {{ IBAN }} \\
+\textbf{Declaratie datum:} & {{ submission_time }} \\
+\textbf{Prijs:} & \textbf{€{{ cost }}} \\
+\textbf{Kamp:} & {{ camp }} \\
+\textbf{Specificatie:} & {{ specification }} \\
+\textbf{Omschrijving:} & {{ description }} \\
+\textbf{Opmerkingen:} & {{ comments }} \\
+\end{tabular}
+
+\vspace{20pt}
+\noindent\rule{\textwidth}{0.4pt}
+
+\vspace{30pt}
+\begin{center}
+    {\large \textit{Voor de bonnen, zie volgende pagina's}}
+\end{center}
+
+\newpage
+
+{{ bonnen }}
+
+\end{document}
