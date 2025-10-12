@@ -1,14 +1,32 @@
 #!/bin/sh
 
-# Create new group using target GID
-odgroup='onedrive'
-groupadd "${odgroup}" -g "1000"
-
-# Create new user using target UID
-oduser='onedrive'
-useradd -m "${oduser}" -u "1000" -g "1000"
-
 RESYNC=false
+
+# Desired IDs
+TARGET_UID=1000
+TARGET_GID=1000
+
+# Check if a group with GID=1000 already exists
+existing_group=$(getent group "$TARGET_GID" | cut -d: -f1)
+if [ -n "$existing_group" ]; then
+    odgroup="$existing_group"
+    echo "Using existing group '$odgroup' (GID=$TARGET_GID)"
+else
+    odgroup='onedrive'
+    echo "Creating new group '$odgroup' (GID=$TARGET_GID)"
+    groupadd -g "$TARGET_GID" "$odgroup"
+fi
+
+# Check if a user with UID=1000 already exists
+existing_user=$(getent passwd "$TARGET_UID" | cut -d: -f1)
+if [ -n "$existing_user" ]; then
+    oduser="$existing_user"
+    echo "Using existing user '$oduser' (UID=$TARGET_UID)"
+else
+    oduser='onedrive'
+    echo "Creating new user '$oduser' (UID=$TARGET_UID, GID=$TARGET_GID)"
+    useradd -m -u "$TARGET_UID" -g "$TARGET_GID" "$oduser"
+fi
 
 echo "---------------- STARTING SYNC ---------------"
 #First, we get any new data in
