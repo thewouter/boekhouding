@@ -1,10 +1,13 @@
 #!/bin/sh
 
+
 RESYNC=false
 
 # Desired IDs
 TARGET_UID=1000
 TARGET_GID=1000
+
+
 
 # Check if a group with GID=1000 already exists
 existing_group=$(getent group "$TARGET_GID" | cut -d: -f1)
@@ -30,7 +33,7 @@ fi
 
 echo "---------------- STARTING SYNC ---------------"
 #First, we get any new data in
-gosu "${oduser}" /usr/local/bin/onedrive --sync --single-directory 'exchange_folder' --confdir /onedrive/conf --syncdir /onedrive/data
+/usr/sbin/gosu "${oduser}" /usr/local/bin/onedrive --sync --verbose --single-directory 'exchange_folder' --confdir /onedrive/conf --syncdir /onedrive/data
 
 echo "---------------- SYNCED, STARTING CHECK ---------------"
 stat -c %y /onedrive/data/exchange_folder/last_boekhouding.gnucash
@@ -51,7 +54,7 @@ fi
 
 if $RESYNC; then
   echo "---------------- RE-SYNCING ---------------"
-  gosu "${oduser}" /usr/local/bin/onedrive --sync --single-directory 'exchange_folder' --confdir /onedrive/conf --syncdir /onedrive/data
+  /usr/sbin/gosu "${oduser}" /usr/local/bin/onedrive --sync --single-directory 'exchange_folder' --confdir /onedrive/conf --syncdir /onedrive/data
 fi
 
 
