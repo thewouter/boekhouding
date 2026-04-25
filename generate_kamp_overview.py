@@ -170,7 +170,7 @@ if __name__ == '__main__':
     ]
 
     for kamp in kampen:
-        overview = generate_overview(kamp, 2026)
+        overview = generate_overview(kamp, datetime.now().year)
 
         with open(f"{SAVE_LOCATION}/kampoverzichten/overzicht_{kamp}.txt", "w") as f:
             for post, items in overview.items():
