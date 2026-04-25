@@ -105,7 +105,7 @@ def generate_overview(camp_name: str, year=None):
     # copy file (same as before)
     shutil.copy(
         f"{SAVE_LOCATION}/last_boekhouding.gnucash",
-        f"{SAVE_LOCATION}/scratch/database.gnucash"
+        f"{CACHE_LOCATION}/scratch/database.gnucash"
     )
 
     accounts, transactions = parse_gnucash_xml(
