@@ -6,6 +6,7 @@ from datetime import datetime
 import xml.etree.ElementTree as ET
 
 SAVE_LOCATION = '/onedrive/data/exchange_folder'
+CACHE_LOCATION = ''
 
 
 def strip_ns(elem):
@@ -108,7 +109,7 @@ def generate_overview(camp_name: str, year=None):
     )
 
     accounts, transactions = parse_gnucash_xml(
-        f"{SAVE_LOCATION}/scratch/database.gnucash"
+        f"{CACHE_LOCATION}/scratch/database.gnucash"
     )
 
     # --- optional speedup: index by account ---
@@ -163,6 +164,7 @@ if __name__ == '__main__':
 
     if len(sys.argv) == 2:
         SAVE_LOCATION = sys.argv[1]
+        CACHE_LOCATION = sys.argv[1]
 
     kampen = [
         "Scoutdoor", "Eiffel Experience", "Extreem", "Jungle Adventure",
