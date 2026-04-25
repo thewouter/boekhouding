@@ -50,6 +50,11 @@ if [ /onedrive/data/exchange_folder/declaraties -nt /onedrive/conf/last_check_de
     RESYNC=true
 fi
 
+if [ /onedrive/data/exchange_folder/inschrijvingen -nt /onedrive/conf/last_check_inschrijvingen ]; then
+    python3 /scratch/generate_enroll_forms.py
+    RESYNC=true
+fi
+
 
 
 if $RESYNC; then
