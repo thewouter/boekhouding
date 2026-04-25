@@ -1,16 +1,18 @@
 import csv
 import shutil
 import sqlite3
+import sys
 from datetime import datetime
 
+SAVE_LOCATION = '/onedrive/data/exchange_folder'
 
 def generate_overview(camp_name: str, year=None):
     if year is None:
         year = datetime.now().year
     result = ""
     posten = {}
-    shutil.copy("/onedrive/data/exchange_folder/last_boekhouding.gnucash", "/scratch/database.sqlite")
-    db = sqlite3.connect("/scratch/database.sqlite")
+    shutil.copy(f"{SAVE_LOCATION}/last_boekhouding.gnucash", f"{SAVE_LOCATION}/scratch/database.sqlite")
+    db = sqlite3.connect(f"{SAVE_LOCATION}/scratch/database.sqlite")
     for type in ["EXPENSE", "INCOME"]:
         print(f"--{type}--")
         camp_uuid = db.execute(f'SELECT guid FROM accounts WHERE name="{camp_name}" AND account_type="{type}" LIMIT 1').fetchone()[0]
@@ -38,10 +40,13 @@ def generate_overview(camp_name: str, year=None):
     return posten
 
 if __name__ == '__main__':
+    print(sys.argv)
+    if len(sys.argv) == 2:
+        SAVE_LOCATION = sys.argv[1]
     kampen = ["Scoutdoor", "Eiffel Experience", "Extreem", "Jungle Adventure", "Scoutakel", "Scoutakel - 2", "Mission Possible", "Geoscouten", "BBQ"]
     for kamp in kampen:
-        overview = generate_overview(kamp, 2025)
-        with open(f"/onedrive/data/exchange_folder/kampoverzichten/overzicht_{kamp}.txt", "w") as f:
+        overview = generate_overview(kamp, 2026)
+        with open(f"{SAVE_LOCATION}/kampoverzichten/overzicht_{kamp}.txt", "w") as f:
             for post, items in overview.items():
                 f.write(f"{post}:\n")
                 for description, amount in items:
