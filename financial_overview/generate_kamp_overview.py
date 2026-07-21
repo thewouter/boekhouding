@@ -9,7 +9,6 @@ SAVE_LOCATION = '/onedrive/data/exchange_folder'
 def generate_overview(camp_name: str, year=None):
     if year is None:
         year = datetime.now().year
-    result = ""
     posten = {}
     shutil.copy(f"{SAVE_LOCATION}/last_boekhouding.gnucash", f"{SAVE_LOCATION}/scratch/database.sqlite")
     db = sqlite3.connect(f"{SAVE_LOCATION}/scratch/database.sqlite")
@@ -43,7 +42,7 @@ if __name__ == '__main__':
     print(sys.argv)
     if len(sys.argv) == 2:
         SAVE_LOCATION = sys.argv[1]
-    kampen = ["Scoutdoor", "Eiffel Experience", "Extreem", "Jungle Adventure", "Scoutakel", "Scoutakel - 2", "Mission Possible", "Geoscouten", "BBQ"]
+    kampen = ["Scoutdoor", "Eifel Experience", "Extreem", "Jungle Adventure", "Scoutakel", "Scoutakel - 2", "Mission Possible", "Geoscouten", "BBQ", "Hartz"]
     for kamp in kampen:
         overview = generate_overview(kamp, 2026)
         with open(f"{SAVE_LOCATION}/kampoverzichten/overzicht_{kamp}.txt", "w") as f:

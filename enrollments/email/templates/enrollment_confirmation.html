@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <title>Inschrijving ontvangen</title>
+</head>
+<body style="font-family: Aptos, Calibri, Arial, sans-serif; font-size: 12pt; color: #000000; line-height: 1.5;">
+
+<p>Beste {{ participant_names }},</p>
+
+<p>
+    We hebben de inschrijving voor
+    <strong>{{ camp_name }}</strong>
+    in goede orde ontvangen!
+</p>
+
+<p>
+    Je inschrijving is definitief zodra de betaling binnen is.
+    Dit kun je eenvoudig voldoen via onderstaande betaallink:
+</p>
+
+<p>
+    <a href="{{ payment_url }}">{{ payment_url }}</a>
+</p>
+
+<p>
+    Mocht je dit liever direct overmaken, dan kan dat ook.
+</p>
+
+<p>
+    <strong>Bedrag:</strong> €{{ "%.2f"|format(amount) }}<br>
+    <strong>IBAN:</strong> NL33 INGB 0000 2349 42 <br>
+    <strong>Ten name van:</strong> plusscoutskring Trapperskamp.
+</p>
+
+<p>
+    Wij hebben er al zin in!
+</p>
+
+<hr style="margin: 2em 0; border: none; border-top: 1px solid #cccccc;">
+
+<p>Vriendelijke groet,</p>
+
+<p>
+    <strong>{{ signature_name }}</strong><br>
+    {{ signature_title }}
+</p>
+
+{% if logo_url %}
+<p>
+    <img src="{{ logo_url }}"
+         alt="Trapperskamp"
+         width="150">
+</p>
+{% endif %}
+
+</body>
+</html>

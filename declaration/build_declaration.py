@@ -88,7 +88,7 @@ def main():
             for path in pdf_paths:
                 pdf_command += f"\\includepdf[pages={{1-}},scale=0.75]{{{ path }}}\n"
 
-            latex_template = load_template("/scratch/template.tex")
+            latex_template = load_template("/scratch/declaration/template.tex")
             rendered_latex = latex_template.replace("{{ name }}", tex_escape(data["name"]))
             rendered_latex = rendered_latex.replace("{{ cost }}", tex_escape(data["cost"]))
             rendered_latex = rendered_latex.replace("{{ IBAN }}", tex_escape(data["IBAN:"]))
