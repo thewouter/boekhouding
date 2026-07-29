@@ -38,7 +38,7 @@ def generate_overview(camp_name: str, year=None):
 
     return posten
 
-if __name__ == '__main__':
+def main():
     print(sys.argv)
     if len(sys.argv) == 2:
         SAVE_LOCATION = sys.argv[1]
@@ -50,3 +50,7 @@ if __name__ == '__main__':
                 f.write(f"{post}:\n")
                 for description, amount in items:
                     f.write(f"    {description}: {'' if amount >= 0 else '-'}€{abs(amount):0.2f}\n")
+
+
+if __name__ == '__main__':
+    main()

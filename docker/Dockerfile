@@ -21,6 +21,6 @@ RUN ln -s /usr/local/bin/gosu /usr/sbin/gosu # ugly hack to make the same script
 RUN cd /scratch && \
     /bin/uv sync
 
-COPY . /scratch
-ENTRYPOINT ["/scratch/docker_script.sh"]
+
+#ENTRYPOINT ["/scratch/docker_script.sh"]
 #ENTRYPOINT ["/bin/bash"]

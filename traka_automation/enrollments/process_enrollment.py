@@ -1,8 +1,8 @@
 import os
 from typing import List
 
-from enrollments.enrollment.enrollment import Enrollment
-from enrollments.enrollment.load_json import load_json
+from traka_automation.enrollments.enrollment.enrollment import Enrollment
+from traka_automation.enrollments.enrollment.load_json import load_json
 
 
 def load_new_enrollments():

@@ -15,3 +15,14 @@ dependencies = [
     "pyyaml>=6.0.3",
     "uuid>=1.30",
 ]
+
+[project.scripts]
+process-enrollment = "traka_automation.enrollments.process_enrollment:main"
+build-declaration = "traka_automation.declaration.build_declaration:main"
+generate-kamp-overview = "traka_automation.financial_overview.generate_kamp_overview:main"
+
+[tool.uv]
+package = true
+
+[tool.setuptools.packages.find]
+include = ["traka_automation*"]

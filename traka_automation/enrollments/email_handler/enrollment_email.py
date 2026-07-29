@@ -4,7 +4,7 @@ from jinja2 import Environment, FileSystemLoader
 
 
 def generate_enrollment_email(name: str, camp: str, payment_link: str, cost: float) -> str:
-    """Generate an enrollment email in HTML."""
+    """Generate an enrollment email_handler in HTML."""
     env = Environment(
         loader=FileSystemLoader(Path(__file__).resolve().parent / "templates"),
         autoescape=True,

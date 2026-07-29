@@ -1,7 +1,7 @@
 import msal
 import requests
 
-from util.config import secrets_config
+from traka_automation.util.config import secrets_config
 
 
 TENANT_ID = secrets_config["ms_graph"]["tenant_id"]
@@ -10,7 +10,7 @@ CLIENT_SECRET = secrets_config["ms_graph"]["client_secret"]
 
 
 def draft_email(mailbox: str, to_address: str, subject: str, body: str) -> None:
-    """Draft an email to the mailbox."""
+    """Draft an email_handler to the mailbox."""
     app = msal.ConfidentialClientApplication(
         CLIENT_ID,
         authority=f"https://login.microsoftonline.com/{TENANT_ID}",

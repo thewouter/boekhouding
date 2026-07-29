@@ -1,0 +1,7 @@
+FROM wvanharten/onedrive
+
+COPY . /scratch
+RUN cd /scratch && uv sync
+
+ENTRYPOINT ["/scratch/docker_script.sh"]
+#ENTRYPOINT ["/bin/bash"]

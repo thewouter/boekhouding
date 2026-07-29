@@ -2,10 +2,10 @@ from datetime import datetime
 from mollie.api.client import Client
 from mollie.api.objects.payment_link import PaymentLink
 
-from util.config import secrets_config
+from traka_automation.util.config import secrets_config
 
 def get_mollie_client() -> Client:
-    """Get a mollie client."""
+    """Get a mollie_connection client."""
     mollie_key = secrets_config["mollie"]["api_key"]
     mollie_client = Client()
     mollie_client.set_api_key(mollie_key)

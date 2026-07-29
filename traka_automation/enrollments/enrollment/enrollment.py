@@ -5,8 +5,8 @@ from datetime import datetime
 from mollie.api.objects.payment_link import PaymentLink
 from pydantic import BaseModel, ConfigDict
 
-from enrollments.email import generate_enrollment_email, draft_email
-from enrollments.mollie.generate_mollie_payment_link import generate_payment_link
+from traka_automation.enrollments.email_handler import generate_enrollment_email, draft_email
+from traka_automation.enrollments.mollie_connection.generate_mollie_payment_link import generate_payment_link
 
 
 class Enrollment(BaseModel):
@@ -53,7 +53,7 @@ class Enrollment(BaseModel):
             "amount": f"{self.amount:0.2f}",
             "name": self.name,
             "payment_link": self.payment_link.payment_link,
-            "email": self.email,
+            "email_handler": self.email,
         })
 
     def write_to_file(self, folder: str) -> None:
@@ -62,7 +62,7 @@ class Enrollment(BaseModel):
             f.write(self.json_representation)
 
     def send_email_enrollment_confirmation(self) -> None:
-        """Send a confirmation email to the (fist) enrollment participant."""
+        """Send a confirmation email_handler to the (fist) enrollment participant."""
         html = generate_enrollment_email(
             name=self.name,
             camp=self.camp,
