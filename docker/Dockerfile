@@ -11,7 +11,17 @@ RUN apt-get update && \
 
 RUN apt-get update && \
     apt-get install -y libreoffice libreoffice-calc fonts-dejavu-core && \
-    apt-get clean && rm -rf /var/lib/apt/lists/*
+    apt-get clean &&  \
+    rm -rf /var/lib/apt/lists/*
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends fontconfig && \
+    rm -rf /var/lib/apt/lists/* \
+
+RUN mkdir -p /usr/local/share/fonts/custom
+COPY fonts/* /usr/local/share/fonts/custom/
+RUN chmod 644 /usr/local/share/fonts/custom/* && \
+    fc-cache -fv
 
 COPY uv.lock /scratch/uv.lock
 COPY pyproject.toml /scratch/pyproject.toml
