@@ -3,7 +3,6 @@ import requests
 
 from traka_automation.util.config import secrets_config
 
-
 TENANT_ID = secrets_config["ms_graph"]["tenant_id"]
 CLIENT_ID = secrets_config["ms_graph"]["client_id"]
 CLIENT_SECRET = secrets_config["ms_graph"]["client_secret"]

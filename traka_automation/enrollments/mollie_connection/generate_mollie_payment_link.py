@@ -1,8 +1,10 @@
 from datetime import datetime
+
 from mollie.api.client import Client
 from mollie.api.objects.payment_link import PaymentLink
 
 from traka_automation.util.config import secrets_config
+
 
 def get_mollie_client() -> Client:
     """Get a mollie_connection client."""

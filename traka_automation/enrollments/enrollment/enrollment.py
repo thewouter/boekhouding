@@ -1,12 +1,17 @@
 import json
 import os
-from datetime import datetime
+from datetime import UTC, datetime
 
 from mollie.api.objects.payment_link import PaymentLink
 from pydantic import BaseModel, ConfigDict
 
-from traka_automation.enrollments.email_handler import generate_enrollment_email, draft_email
-from traka_automation.enrollments.mollie_connection.generate_mollie_payment_link import generate_payment_link
+from traka_automation.enrollments.email_handler import (
+    draft_email,
+    generate_enrollment_email,
+)
+from traka_automation.enrollments.mollie_connection.generate_mollie_payment_link import (
+    generate_payment_link,
+)
 
 
 class Enrollment(BaseModel):
@@ -22,13 +27,13 @@ class Enrollment(BaseModel):
     model_config = ConfigDict(arbitrary_types_allowed=True) #  To prevent generating many payment links
 
     @classmethod
-    def from_json(cls, json_data: dict, filename) -> "Enrollment":
+    def from_json(cls, json_data: dict, filename) -> Enrollment:
         """Generate a new enrollment from JSON data and an uuid for traceability."""
         camp = json_data["activity"]["name"]
         price = json_data["activity"]["price"]
         names = [participant["name"] for participant in json_data["participants"]]
         year, month, day = json_data["activity"]["endDate"].split("-")
-        end_date = datetime(year=int(year), month=int(month), day=int(day))
+        end_date = datetime(year=int(year), month=int(month), day=int(day), tzinfo=UTC)
         email_address = json_data["participants"][0]["emailAddress"]
         if len(names) == 1:
             name = names[0]

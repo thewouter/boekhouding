@@ -1,5 +1,4 @@
 import os
-from typing import List
 
 from traka_automation.enrollments.enrollment.enrollment import Enrollment
 from traka_automation.enrollments.enrollment.load_json import load_json
@@ -7,7 +6,7 @@ from traka_automation.enrollments.enrollment.load_json import load_json
 
 def load_new_enrollments():
     """Load all new enrollments into a list."""
-    new_enrollments : List[Enrollment] = []
+    new_enrollments : list[Enrollment] = []
     directory = "/onedrive/data/exchange_folder/inschrijvingen"
     for file in os.listdir(directory):
         filename = os.fsdecode(file)

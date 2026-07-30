@@ -1,10 +1,11 @@
-import os
 import json
+import os
 import re
 import shutil
 import subprocess
 
 from PIL import Image
+
 
 def convert_xlsx_to_pdf(file_path, output_dir):
     result = subprocess.run([
@@ -13,7 +14,7 @@ def convert_xlsx_to_pdf(file_path, output_dir):
         "--convert-to", "pdf",
         "--outdir", output_dir,
         file_path
-    ], capture_output=False, text=True)
+    ], capture_output=False, text=True, check=False)
 
     if result.returncode != 0:
         raise RuntimeError(f"LibreOffice failed: {result.stderr}")
