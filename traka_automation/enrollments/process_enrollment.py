@@ -1,7 +1,7 @@
 import os
 
 from traka_automation.enrollments.enrollment.enrollment import Enrollment
-from traka_automation.enrollments.enrollment.load_json import load_json
+from traka_automation.util.load_json import load_json
 
 
 def load_new_enrollments():
@@ -23,7 +23,7 @@ def main():
         print(f"processing enrollment {enrollment}")
         enrollment.write_to_file(folder="/onedrive/data/exchange_folder/inschrijfformulieren")
         enrollment.send_email_enrollment_confirmation()
-        os.remove(f"/onedrive/data/exchange_folder/inschrijvingen/{enrollment.filename}")
+        # os.remove(f"/onedrive/data/exchange_folder/inschrijvingen/{enrollment.filename}")
 
 
 if __name__ == "__main__":
