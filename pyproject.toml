@@ -26,3 +26,9 @@ package = true
 
 [tool.setuptools.packages.find]
 include = ["traka_automation*"]
+
+[dependency-groups]
+dev = [
+    "mypy>=2.3.0",
+    "ruff>=0.16.0",
+]
