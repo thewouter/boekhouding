@@ -1,0 +1,94 @@
+name: Promote main to production
+
+on:
+  workflow_dispatch:
+    inputs:
+      version_bump:
+        description: "Version increment"
+        required: true
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+        default: patch
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Bump version
+        env:
+          VERSION_BUMP: ${{ inputs.version_bump }}
+        run: |
+          python <<'EOF'
+          from pathlib import Path
+          import os
+          import re
+
+          bump = os.environ["VERSION_BUMP"]
+
+          path = Path("pyproject.toml")
+          text = path.read_text()
+
+          match = re.search(
+              r'(?m)^version = "(\d+)\.(\d+)\.(\d+)"$',
+              text
+          )
+
+          if not match:
+              raise RuntimeError("Version not found")
+
+          major, minor, patch = map(int, match.groups())
+
+          if bump == "major":
+              major += 1
+              minor = 0
+              patch = 0
+          elif bump == "minor":
+              minor += 1
+              patch = 0
+          elif bump == "patch":
+              patch += 1
+          else:
+              raise RuntimeError(f"Unknown bump type: {bump}")
+
+          new_version = f"{major}.{minor}.{patch}"
+
+          text = re.sub(
+              r'(?m)^version = "\d+\.\d+\.\d+"$',
+              f'version = "{new_version}"',
+              text,
+              count=1,
+          )
+
+          path.write_text(text)
+          print(f"Bumped version to {new_version}")
+          EOF
+
+      - name: Commit version bump
+        run: |
+          git add pyproject.toml
+          git commit -m "Bump version"
+          git push origin main
+
+      - name: Merge main into production
+        run: |
+          git fetch origin
+          git checkout production
+          git merge origin/main --no-ff -m "Release"
+          git push origin production

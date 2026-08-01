@@ -65,4 +65,13 @@ fi
 
 #Finally, we update the last_check file to reflect the current time we checked if it was older than the boekhouding file
 echo "---------------- UPDATING CHECK FILES ---------------"
-#touch /onedrive/conf/last_check
+
+CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+if [ "$CURRENT_BRANCH" = "production" ]; then
+    echo "On production branch, updating last_check file"
+    touch /onedrive/conf/last_check
+    echo "On production branch, checking for updates"
+    git pull
+else
+    echo "Not on production branch, skipping last_check update and git pull"
+fi
