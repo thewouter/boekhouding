@@ -1,0 +1,34 @@
+[project]
+name = "boekhouding"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "docxtpl>=0.20.2",
+    "jinja2>=3.1.6",
+    "jsonschema>=4.26.0",
+    "mollie-api-python>=4.0.0",
+    "msal>=1.37.0",
+    "pillow>=12.3.0",
+    "pydantic>=2.13.4",
+    "pyyaml>=6.0.3",
+    "uuid>=1.30",
+]
+
+[project.scripts]
+process-enrollment = "traka_automation.enrollments.process_enrollment:main"
+build-declaration = "traka_automation.declaration.build_declaration:main"
+generate-kamp-overview = "traka_automation.financial_overview.generate_kamp_overview:main"
+
+[tool.uv]
+package = true
+
+[tool.setuptools.packages.find]
+include = ["traka_automation*"]
+
+[dependency-groups]
+dev = [
+    "mypy>=2.3.0",
+    "ruff>=0.16.0",
+]

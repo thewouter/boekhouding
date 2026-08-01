@@ -1,9 +1,9 @@
 import csv
+import gzip
 import shutil
 import sys
-import gzip
-from datetime import datetime
 import xml.etree.ElementTree as ET
+from datetime import UTC, datetime
 
 SAVE_LOCATION = '/onedrive/data/exchange_folder'
 CACHE_LOCATION = ''
@@ -98,7 +98,7 @@ def parse_gnucash_xml(path):
 
 def generate_overview(camp_name: str, year=None):
     if year is None:
-        year = datetime.now().year
+        year = datetime.now(tz=UTC).year
 
     posten = {}
 
@@ -158,13 +158,8 @@ def generate_overview(camp_name: str, year=None):
 
     return posten
 
+def main():
 
-if __name__ == '__main__':
-    print(sys.argv)
-
-    if len(sys.argv) == 2:
-        SAVE_LOCATION = sys.argv[1]
-        CACHE_LOCATION = sys.argv[1]
 
     kampen = [
         "Scoutdoor", "Eiffel Experience", "Extreem", "Jungle Adventure",
@@ -172,10 +167,18 @@ if __name__ == '__main__':
     ]
 
     for kamp in kampen:
-        overview = generate_overview(kamp, datetime.now().year)
+        overview = generate_overview(kamp, datetime.now(UTC).year)
 
         with open(f"{SAVE_LOCATION}/kampoverzichten/overzicht_{kamp}.txt", "w") as f:
             for post, items in overview.items():
                 f.write(f"{post}:\n")
-                for description, amount in items:
-                    f.write(f"    {description}: {'' if amount >= 0 else '-'}€{abs(amount):0.2f}\n")
+                f.writelines(f"    {description}: {'' if amount >= 0 else '-'}€{abs(amount):0.2f}\n" for description, amount in items)
+
+
+if __name__ == '__main__':
+    print(sys.argv)
+    if len(sys.argv) == 2:
+        SAVE_LOCATION = sys.argv[1]
+        CACHE_LOCATION = sys.argv[1]
+
+    main()

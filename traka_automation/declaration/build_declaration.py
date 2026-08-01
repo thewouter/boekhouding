@@ -1,10 +1,11 @@
-import os
 import json
+import os
 import re
 import shutil
 import subprocess
 
 from PIL import Image
+
 
 def convert_xlsx_to_pdf(file_path, output_dir):
     result = subprocess.run([
@@ -13,7 +14,7 @@ def convert_xlsx_to_pdf(file_path, output_dir):
         "--convert-to", "pdf",
         "--outdir", output_dir,
         file_path
-    ], capture_output=False, text=True)
+    ], capture_output=False, text=True, check=False)
 
     if result.returncode != 0:
         raise RuntimeError(f"LibreOffice failed: {result.stderr}")
@@ -88,7 +89,7 @@ def main():
             for path in pdf_paths:
                 pdf_command += f"\\includepdf[pages={{1-}},scale=0.75]{{{ path }}}\n"
 
-            latex_template = load_template("/scratch/template.tex")
+            latex_template = load_template("/scratch/declaration/template.tex")
             rendered_latex = latex_template.replace("{{ name }}", tex_escape(data["name"]))
             rendered_latex = rendered_latex.replace("{{ cost }}", tex_escape(data["cost"]))
             rendered_latex = rendered_latex.replace("{{ IBAN }}", tex_escape(data["IBAN:"]))

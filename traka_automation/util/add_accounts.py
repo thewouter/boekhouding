@@ -1,12 +1,12 @@
 import sqlite3
 import uuid
 
-kampen = ["Scoutdoor", "Eiffel Experience", "Extreem", "Jungle Adventure", "Scoutakel", "Scoutakel - 2", "Mission Possible", "Geoscouten"]
+kampen = ["Scoutdoor", "Eifel Experience", "Extreem", "Jungle Adventure", "Scoutakel", "Scoutakel - 2", "Mission Possible", "Geoscouten"]
 subposten = ["Voorbereidingen", "Vervoerskosten", "Gebouwen en terreinen", "Programmakosten", "Voeding", "Organisatiekosten"]
 
 db = sqlite3.connect("Traka_boekhouding_2025_TESTER.sqlite")
 commodity_guid = db.execute('SELECT guid FROM commodities WHERE mnemonic="EUR" LIMIT 1').fetchone()[0]
-root_account_guid = db.execute(f'SELECT guid FROM accounts WHERE parent_guid IS NULL LIMIT 1').fetchone()[0]
+root_account_guid = db.execute('SELECT guid FROM accounts WHERE parent_guid IS NULL LIMIT 1').fetchone()[0]
 expense_root_guid = db.execute(f'SELECT guid FROM accounts WHERE parent_guid = "{root_account_guid}" AND account_type="EXPENSE" LIMIT 1').fetchone()[0]
 kampen_root_guid = db.execute(f'SELECT guid FROM accounts WHERE parent_guid = "{expense_root_guid}" AND name="Kampen" LIMIT 1').fetchone()[0]
 print(commodity_guid)

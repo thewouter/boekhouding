@@ -1,13 +1,10 @@
 #!/bin/sh
 
-
 RESYNC=false
 
 # Desired IDs
 TARGET_UID=1000
 TARGET_GID=1000
-
-
 
 # Check if a group with GID=1000 already exists
 existing_group=$(getent group "$TARGET_GID" | cut -d: -f1)
@@ -39,18 +36,26 @@ echo "---------------- SYNCED, STARTING CHECK ---------------"
 stat -c %y /onedrive/data/exchange_folder/last_boekhouding.gnucash
 stat -c %y /onedrive/conf/last_check
 #Now, we run the generate_kamp_overview if the edit date of the last boekhouding file is newer than the last_check file
-#[ /onedrive/data/exchange_folder/last_boekhouding.gnucash -nt /onedrive/conf/last_check ] || python3 /scratch/generate_kamp_overview.py
+cd /scratch
 if [ /onedrive/data/exchange_folder/last_boekhouding.gnucash -nt /onedrive/conf/last_check ]; then
-    python3 /scratch/generate_kamp_overview.py
+    echo "Running camp overview generation code"
+    uv run generate-kamp-overview
     RESYNC=true
 fi
 
-if [ /onedrive/data/exchange_folder/declaraties -nt /onedrive/conf/last_check_declaraties ]; then
-    python3 /scratch/build_declaration.py
+if [ /onedrive/data/exchange_folder/declaraties -nt /onedrive/conf/last_check ]; then
+    echo "Running declaration processing code"
+    uv run build-declaration
     RESYNC=true
 fi
 
+if [ /onedrive/data/exchange_folder/inschrijvingen -nt /onedrive/conf/last_check ]; then
+    echo "Running new enrollment code"
+    uv run process-enrollment
+    RESYNC=true
+fi
 
+# If we have changed any files, we resync with onedrive
 
 if $RESYNC; then
   echo "---------------- RE-SYNCING ---------------"
@@ -60,5 +65,4 @@ fi
 
 #Finally, we update the last_check file to reflect the current time we checked if it was older than the boekhouding file
 echo "---------------- UPDATING CHECK FILES ---------------"
-touch /onedrive/conf/last_check
-touch /onedrive/conf/last_check_declaraties
+#touch /onedrive/conf/last_check
