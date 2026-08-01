@@ -32,8 +32,7 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
       - name: Bump version
-        env:
-          VERSION_BUMP: ${{ inputs.version_bump }}
+        id: bump
         run: |
           python <<'EOF'
           from pathlib import Path
@@ -45,11 +44,7 @@ jobs:
           path = Path("pyproject.toml")
           text = path.read_text()
 
-          match = re.search(
-              r'(?m)^version = "(\d+)\.(\d+)\.(\d+)"$',
-              text
-          )
-
+          match = re.search(r'(?m)^version = "(\d+)\.(\d+)\.(\d+)"$', text)
           if not match:
               raise RuntimeError("Version not found")
 
@@ -62,29 +57,36 @@ jobs:
           elif bump == "minor":
               minor += 1
               patch = 0
-          elif bump == "patch":
-              patch += 1
           else:
-              raise RuntimeError(f"Unknown bump type: {bump}")
+              patch += 1
 
-          new_version = f"{major}.{minor}.{patch}"
+          version = f"{major}.{minor}.{patch}"
 
           text = re.sub(
               r'(?m)^version = "\d+\.\d+\.\d+"$',
-              f'version = "{new_version}"',
+              f'version = "{version}"',
               text,
               count=1,
           )
 
           path.write_text(text)
-          print(f"Bumped version to {new_version}")
+
+          with open(os.environ["GITHUB_OUTPUT"], "w") as f:
+              f.write(f"version={version}\n")
           EOF
+        env:
+          VERSION_BUMP: ${{ inputs.version_bump }}
 
       - name: Commit version bump
         run: |
           git add pyproject.toml
-          git commit -m "Bump version"
+          git commit -m "Bump version to v${{ steps.bump.outputs.version }}"
           git push origin main
+
+      - name: Create and push tag
+        run: |
+          git tag "v${{ steps.bump.outputs.version }}"
+          git push origin "v${{ steps.bump.outputs.version }}"
 
       - name: Merge main into production
         run: |
