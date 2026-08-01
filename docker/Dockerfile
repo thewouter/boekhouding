@@ -16,10 +16,12 @@ RUN apt-get update && \
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends fontconfig && \
-    rm -rf /var/lib/apt/lists/* \
+    rm -rf /var/lib/apt/lists/*
 
 RUN mkdir -p /usr/local/share/fonts/custom
+
 COPY fonts/* /usr/local/share/fonts/custom/
+
 RUN chmod 644 /usr/local/share/fonts/custom/* && \
     fc-cache -fv
 
