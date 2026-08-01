@@ -65,4 +65,4 @@ fi
 
 #Finally, we update the last_check file to reflect the current time we checked if it was older than the boekhouding file
 echo "---------------- UPDATING CHECK FILES ---------------"
-touch /onedrive/conf/last_check
+#touch /onedrive/conf/last_check
