@@ -1,6 +1,4 @@
-import json
 import os
-from datetime import UTC, datetime
 
 from mollie.api.objects.payment_link import PaymentLink
 from pydantic import BaseModel, ConfigDict
@@ -9,43 +7,58 @@ from traka_automation.enrollments.email_handler import (
     draft_email,
     generate_enrollment_email,
 )
+from traka_automation.enrollments.enrollment.camp import Camp
+from traka_automation.enrollments.enrollment.participant import Participant
 from traka_automation.enrollments.mollie_connection.generate_mollie_payment_link import (
     generate_payment_link,
 )
 
 
-class Enrollment(BaseModel):
+class EnrollmentWebForm(BaseModel):
     """A filled out enrollment form."""
-    camp: str
-    amount: float
-    name: str
-    end_date: datetime
-    filename: str
+    camp: Camp
+    participants: list[Participant] = []
+    filename: str | None = None
     payment_link_cache: PaymentLink | None = None
-    email: str
 
     model_config = ConfigDict(arbitrary_types_allowed=True) #  To prevent generating many payment links
 
     @classmethod
-    def from_json(cls, json_data: dict, filename) -> Enrollment:
+    def from_json(cls, json_data: dict, filename) -> EnrollmentWebForm:
         """Generate a new enrollment from JSON data and an uuid for traceability."""
-        camp = json_data["activity"]["name"]
-        price = json_data["activity"]["price"]
-        names = [participant["name"] for participant in json_data["participants"]]
-        year, month, day = json_data["activity"]["endDate"].split("-")
-        end_date = datetime(year=int(year), month=int(month), day=int(day), tzinfo=UTC)
-        email_address = json_data["participants"][0]["emailAddress"]
+        camp_name = json_data["activity"]["name"]
+        camp_price = json_data["activity"]["price"]
+        camp_start_date = json_data["activity"]["startDate"]
+        camp_end_date = json_data["activity"]["endDate"]
+        camp = Camp(name=camp_name, price=camp_price, start_date=camp_start_date, end_date=camp_end_date)
+
+        participants = json_data["participants"]
+        participant_list = []
+        for participant in participants:
+            participant_list.append(Participant.from_json(participant, camp))
+
+        return cls(camp=camp, participants=participant_list)
+
+    @property
+    def total_price(self):
+        """The total price of the enrollment."""
+        return sum([p.camp.price for p in self.participants])
+
+    @property
+    def combined_names(self):
+        """The combined names of the enrollment participants."""
+        names = [participant.name for participant in self.participants]
         if len(names) == 1:
-            name = names[0]
+            combined_names = names[0]
         else:
-            name = f"{', '.join(names[:-1])} en {names[-1]}"
-        return cls(camp=camp, amount=price, name=name, end_date=end_date, filename=filename, email=email_address)
+            combined_names = f"{', '.join(names[:-1])} en {names[-1]}"
+        return combined_names
 
     @property
     def payment_link(self) -> PaymentLink:
         """Get the payment link for the Enrollment."""
         if self.payment_link_cache is None:
-            self.payment_link_cache = generate_payment_link(self.name, self.camp, self.amount, self.end_date)
+            self.payment_link_cache = generate_payment_link(self)
             if self.payment_link_cache is None:
                 raise ValueError("Payment link not available")
         return self.payment_link_cache
@@ -53,23 +66,20 @@ class Enrollment(BaseModel):
     @property
     def json_representation(self) -> str:
         """Flatten the Enrollment to JSON."""
-        return json.dumps({
-            "camp": self.camp,
-            "amount": f"{self.amount:0.2f}",
-            "name": self.name,
-            "payment_link": self.payment_link.payment_link,
-            "email_handler": self.email,
-        })
+        return self.model_dump()
 
     def write_to_file(self, folder: str) -> None:
         """Write the Enrollment object to a file for further processing."""
-        with open(os.path.join(folder, self.filename), "w") as f:
-            f.write(self.json_representation)
+        if self.filename is not None:
+            with open(os.path.join(folder, self.filename), "w") as f:
+                f.write(self.json_representation)
+            return
+        raise ValueError("Filename not available")
 
     def send_email_enrollment_confirmation(self) -> None:
         """Send a confirmation email_handler to the (fist) enrollment participant."""
         html = generate_enrollment_email(
-            name=self.name,
+            name=self.combined_names,
             camp=self.camp,
             payment_link=self.payment_link.payment_link,
             cost=self.amount
