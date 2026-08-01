@@ -1,6 +1,7 @@
 import os
 
 from traka_automation.enrollments.enrollment.enrollment import Enrollment
+from traka_automation.enrollments.enrollment.enrollment_form import generate_enrollment_form_and_save
 from traka_automation.util.load_json import load_json
 
 
@@ -23,6 +24,7 @@ def main():
         print(f"processing enrollment {enrollment}")
         enrollment.write_to_file(folder="/onedrive/data/exchange_folder/inschrijfformulieren")
         enrollment.send_email_enrollment_confirmation()
+        generate_enrollment_form_and_save(f"/onedrive/data/exchange_folder/inschrijfformulieren/{enrollment.filename.split('.')[0]}.docx")
         # os.remove(f"/onedrive/data/exchange_folder/inschrijvingen/{enrollment.filename}")
 
 
