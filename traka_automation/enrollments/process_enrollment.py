@@ -24,7 +24,8 @@ def main():
         print(f"processing enrollment {enrollment}")
         enrollment.write_to_file(folder="/onedrive/data/exchange_folder/inschrijfformulieren")
         enrollment.send_email_enrollment_confirmation()
-        generate_enrollment_form_and_save(f"/onedrive/data/exchange_folder/inschrijfformulieren/{enrollment.filename.split('.')[0]}.docx")
+        enrollment.generate_and_save_enrollment_forms(folder=f"/onedrive/data/exchange_folder/inschrijfformulieren/")
+        # generate_enrollment_form_and_save({,enrollment.)
         # os.remove(f"/onedrive/data/exchange_folder/inschrijvingen/{enrollment.filename}")
 
 

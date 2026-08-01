@@ -3,39 +3,42 @@ from pathlib import Path
 
 from docxtpl import DocxTemplate
 
-def generate_docx_enrollment_form() -> DocxTemplate:
+from traka_automation.enrollments.enrollment.participant import Participant
+
+
+def generate_docx_enrollment_form(participant: Participant) -> DocxTemplate:
     """Generate an enrollment form."""
     doc = DocxTemplate(f"{Path(__file__).resolve().parent.parent}/templates/aanmeldformulier.docx")
 
     context = {
         "camp": {
-            "name": "Jungle Adventure",
-            "year": 2020,
-            "text_date_start": "2 january 2020",
-            "text_date_end": "2 february 2020",
+            "name": participant.camp.name,
+            "year": participant.camp.start_date.year,
+            "text_date_start": participant.camp.start_date_string,
+            "text_date_end": participant.camp.end_date_string,
         },
         "participant": {
-            "name": "Jan Jansen",
-            "address": "6548 DE",
-            "city": "Amsterdkam",
-            "birth_date": "1980-01-19",
-            "email_address": "testmai@adres.com",
-            "phone": "0612345678",
-            "backup_email_address": "papaenmama@amil.com",
-            "backup_phone": "0612345678",
-            "member_number": "665546",
-            "scouting_group": "Scouting naampe",
-            "scouting_city": "Amsterdkam",
-            "age_group": "Bevers",
+            "name": participant.name,
+            "address": participant.address,
+            "city": participant.city,
+            "birth_date": participant.birth_date,
+            "email_address": participant.email_address,
+            "phone": participant.phone,
+            "backup_email_address": participant.backup_email_address,
+            "backup_phone": participant.backup_phone,
+            "member_number": participant.member_number,
+            "scouting_group": participant.scouting_group,
+            "scouting_city": participant.scouting_city,
+            "age_group": participant.age_group,
         },
         "payment_term": {
             "one": {
-                "text": "30 november 2019",
-                "retainer": "50,00"
+                "text": participant.camp.cancellation_term_one.text,
+                "retainer": participant.camp.cancellation_term_one.retainer,
             },
             "two": {
-                "text": "40 november 2019",
-                "retainer": "80,00"
+                "text": participant.camp.cancellation_term_two.text,
+                "retainer": participant.camp.cancellation_term_two.retainer,
             }
         }
     }
@@ -65,8 +68,8 @@ def convert_docx_to_pdf(docx_path: str) -> None:
         text=True,
     )
 
-def generate_enrollment_form_and_save(filename) -> None:
+def generate_enrollment_form_and_save(filename, participant: Participant) -> None:
     """Generate an enrollment form and save it to the given filename as docx and PDF."""
-    enrollment_form = generate_docx_enrollment_form()
+    enrollment_form = generate_docx_enrollment_form(participant)
     save_enrollment_form(enrollment_form, filename)
     convert_docx_to_pdf(filename)

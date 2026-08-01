@@ -8,6 +8,7 @@ from traka_automation.enrollments.email_handler import (
     generate_enrollment_email,
 )
 from traka_automation.enrollments.enrollment.camp import Camp
+from traka_automation.enrollments.enrollment.enrollment_form import generate_enrollment_form_and_save
 from traka_automation.enrollments.enrollment.participant import Participant
 from traka_automation.enrollments.mollie_connection.generate_mollie_payment_link import (
     generate_payment_link,
@@ -91,4 +92,9 @@ class EnrollmentWebForm(BaseModel):
             body=html
         )
 
+    def generate_and_save_enrollment_forms(self, folder):
+        """Generate an enrollment form and save it to the given folder for all participants."""
+        for participant in self.participants:
+            filename = f"{folder}/{participant.name.replace(' ', '_')}.docx"
+            generate_enrollment_form_and_save(filename, participant)
 
