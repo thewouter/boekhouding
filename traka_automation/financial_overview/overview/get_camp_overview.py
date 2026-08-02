@@ -4,10 +4,11 @@ from typing import Any
 def get_camp_overview(
     accounts: dict[str, dict[str, Any]],
     camp_name: str,
-    transactions: dict[str, list[dict[str, Any]]],
+    transactions: list[Any],
     year: int,
 ) -> dict[str, list[Any]]:
-    overview: dict = {}
+    """Create the overview of the camp with the given name from the transactions and accounts list in the given year."""
+    overview: dict[str, list[Any]] = {}
 
     for account_type in ["EXPENSE", "INCOME"]:
         print(f"--{account_type}--")
