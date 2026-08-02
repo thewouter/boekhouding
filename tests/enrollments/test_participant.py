@@ -1,4 +1,6 @@
-from traka_automation.enrollments.enrollment.enrollment_web_form import EnrollmentWebForm
+from traka_automation.enrollments.enrollment.enrollment_web_form import (
+    EnrollmentWebForm,
+)
 
 
 def test_enrollment_from_json(enrollment_json):

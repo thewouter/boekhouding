@@ -1,7 +1,6 @@
 from datetime import datetime, timedelta
 
 from pydantic import BaseModel
-import locale
 
 from traka_automation.util.dutch_date import dutch_date
 
