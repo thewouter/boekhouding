@@ -38,6 +38,9 @@ dev = [
     "ruff>=0.16.0",
 ]
 
+[tool.mypy]
+explicit_package_bases = true
+
 [[tool.mypy.overrides]]
 module = ["docxtpl.*", "msal.*"]
 follow_untyped_imports = true
