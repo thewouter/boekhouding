@@ -19,7 +19,7 @@ class EnrollmentWebForm(BaseModel):
     """A filled out enrollment form."""
     camp: Camp
     participants: list[Participant] = []
-    filename: str | None = None
+    uuid: str
     payment_link_cache: PaymentLink | None = None
 
     model_config = ConfigDict(arbitrary_types_allowed=True) #  To prevent generating many payment links
@@ -32,13 +32,14 @@ class EnrollmentWebForm(BaseModel):
         camp_start_date = json_data["activity"]["startDate"]
         camp_end_date = json_data["activity"]["endDate"]
         camp = Camp(name=camp_name, price=camp_price, start_date=camp_start_date, end_date=camp_end_date)
+        uuid = filename.split(".")[0]
 
         participants = json_data["participants"]
         participant_list = []
         for participant in participants:
             participant_list.append(Participant.from_json(participant, camp))
 
-        return cls(camp=camp, participants=participant_list)
+        return cls(camp=camp, participants=participant_list, uuid=uuid)
 
     @property
     def total_price(self):
@@ -67,7 +68,7 @@ class EnrollmentWebForm(BaseModel):
     @property
     def json_representation(self) -> str:
         """Flatten the Enrollment to JSON."""
-        return self.model_dump()
+        return self.model_dump_json()
 
     @property
     def email_addresses(self) -> list[str]:
@@ -75,25 +76,6 @@ class EnrollmentWebForm(BaseModel):
 
     def write_to_file(self, folder: str) -> None:
         """Write the Enrollment object to a file for further processing."""
-        if self.filename is not None:
-            with open(os.path.join(folder, self.filename), "w") as f:
-                f.write(self.json_representation)
-            return
-        raise ValueError("Filename not available")
-
-    def send_email_enrollment_confirmation(self) -> None:
-        """Send a confirmation email_handler to the (fist) enrollment participant."""
-        html = generate_enrollment_email(self)
-        draft_email(
-            mailbox="inschrijvingen@trapperskamp.com",  # info@ at a later time
-            to_addresses=self.email_addresses,
-            subject=f"Bevestiging inschrijving voor {self.camp}",
-            body=html
-        )
-
-    def generate_and_save_enrollment_forms(self, folder):
-        """Generate an enrollment form and save it to the given folder for all participants."""
-        for participant in self.participants:
-            filename = f"{folder}/{participant.name.replace(' ', '_')}.docx"
-            generate_enrollment_form_and_save(filename, participant)
-
+        filename = os.path.join(folder, f"{self.uuid}.json")
+        with open(filename, "w") as f:
+            f.write(self.json_representation)
