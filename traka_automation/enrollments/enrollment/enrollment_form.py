@@ -19,6 +19,7 @@ def generate_docx_enrollment_form(participant: Participant) -> DocxTemplate:
             "year": participant.camp.start_date.year,
             "text_date_start": participant.camp.start_date_string,
             "text_date_end": participant.camp.end_date_string,
+            "price": f"{participant.camp.price:0.2f}",
         },
         "participant": {
             "name": participant.name,
@@ -37,11 +38,11 @@ def generate_docx_enrollment_form(participant: Participant) -> DocxTemplate:
         "payment_term": {
             "one": {
                 "text": participant.camp.cancellation_term_one.text_date,
-                "retainer": participant.camp.cancellation_term_one.retainer,
+                "retainer": f"{participant.camp.cancellation_term_one.retainer:0.2f}",
             },
             "two": {
                 "text": participant.camp.cancellation_term_two.text_date,
-                "retainer": participant.camp.cancellation_term_two.retainer,
+                "retainer": f"{participant.camp.cancellation_term_two.retainer:0.2f}",
             },
         },
     }
