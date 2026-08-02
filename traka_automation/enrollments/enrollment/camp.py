@@ -13,6 +13,10 @@ class CancellationTerm(BaseModel):
     def text_date(self):
         return dutch_date(self.date)
 
+    @property
+    def text_retainer(self):
+        return f"€{self.retainer:.2f}"
+
 
 CANCELLATION_INTERVAL_ONE = timedelta(days=60)
 CANCELLATION_INTERVAL_TWO = timedelta(days=30)
