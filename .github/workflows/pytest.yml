@@ -18,6 +18,7 @@ jobs:
           # Install a specific version of uv.
           version: "0.12.1"
           python-version: ${{ matrix.python-version }}
+          enable-cache: true
 
       - name: Install the project
         run: uv sync --locked --all-extras --group dev
