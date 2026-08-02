@@ -6,7 +6,6 @@ from traka_automation.enrollments.enrollment.camp import Camp
 from traka_automation.enrollments.enrollment.enrollment_web_form import (
     EnrollmentWebForm,
 )
-from traka_automation.util.load_json import load_json
 
 
 @pytest.fixture
@@ -82,9 +81,7 @@ def example_enrollment_json() -> dict:
 
 @pytest.fixture
 def example_enrollment_web_form(example_enrollment_json: dict) -> EnrollmentWebForm:
-    return EnrollmentWebForm.from_json(
-        example_enrollment_json, uuid="test-uuid"
-    )
+    return EnrollmentWebForm.from_json(example_enrollment_json, uuid="test-uuid")
 
 
 @pytest.fixture

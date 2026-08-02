@@ -27,6 +27,12 @@ jobs:
           python-version: ${{ matrix.python-version }}
           enable-cache: true
 
+      - name: Install Dutch language
+        run: |
+          sudo apt-get install -y --no-install-recommends fontconfig locales
+          sudo sed -i -e 's/# nl_NL.UTF-8 UTF-8/nl_NL.UTF-8 UTF-8/' /etc/locale.gen
+          sudo dpkg-reconfigure --frontend=noninteractive locales
+
       - name: Install the project
         run: uv sync --locked --all-extras --group dev
 
