@@ -22,7 +22,7 @@ def send_email_enrollment_confirmation(enrollment_web_form: EnrollmentWebForm) -
     draft_email(
         mailbox="inschrijvingen@trapperskamp.com",  # info@ at a later time
         to_addresses=enrollment_web_form.email_addresses,
-        subject=f"Bevestiging inschrijving voor {enrollment_web_form.camp}",
+        subject=f"Bevestiging inschrijving voor {enrollment_web_form.camp.name} {enrollment_web_form.camp.year}",
         body=html,
     )
 
@@ -48,15 +48,20 @@ def load_new_enrollments():
     return new_enrollments
 
 
+def process_enrollment(enrollment: EnrollmentWebForm) -> None:
+    """Process the enrollment and save the generated files to the given folder for all participants."""
+    print(f"processing enrollment {enrollment}")
+    enrollment.write_to_file(folder=OUTPUT_FOLDER)
+    send_email_enrollment_confirmation(enrollment)
+    generate_and_save_enrollment_forms(enrollment, folder=OUTPUT_FOLDER)
+    # os.remove(f"/onedrive/data/exchange_folder/inschrijvingen/{enrollment.filename}")
+
+
 def main():
     """Main enrollment loop."""
     new_enrollments = load_new_enrollments()
     for enrollment in new_enrollments:
-        print(f"processing enrollment {enrollment}")
-        enrollment.write_to_file(folder=OUTPUT_FOLDER)
-        send_email_enrollment_confirmation(enrollment)
-        generate_and_save_enrollment_forms(enrollment, folder=OUTPUT_FOLDER)
-        # os.remove(f"/onedrive/data/exchange_folder/inschrijvingen/{enrollment.filename}")
+        process_enrollment(enrollment)
 
 
 if __name__ == "__main__":

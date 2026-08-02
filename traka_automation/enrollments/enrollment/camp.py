@@ -46,3 +46,7 @@ class Camp(BaseModel):
         return CancellationTerm(
             date=self.start_date - CANCELLATION_INTERVAL_TWO, retainer=self.price * 0.5
         )
+
+    @property
+    def year(self):
+        return self.start_date.year
