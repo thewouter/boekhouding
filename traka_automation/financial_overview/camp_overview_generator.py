@@ -1,10 +1,10 @@
 import sys
 from datetime import UTC, datetime
 
+from generate_overview import CACHE_LOCATION, SAVE_LOCATION
+
 from traka_automation.financial_overview.generate_overview import generate_overview
 from traka_automation.financial_overview.save_camp_overview import save_camp_overview
-
-from generate_overview import CACHE_LOCATION, SAVE_LOCATION
 
 CAMPS = [
     "Scoutdoor",
@@ -19,16 +19,17 @@ CAMPS = [
 ]
 
 
+def main():
+    for camp in CAMPS:
+        process_camp(camp)
+
+
 def process_camp(camp: str):
+    """Process a single camp and save the overview to a file."""
     overview = generate_overview(camp, datetime.now(UTC).year)
     save_camp_overview(
         overview, f"{SAVE_LOCATION}/kampoverzichten/overzicht_{camp}.txt"
     )
-
-
-def main():
-    for camp in CAMPS:
-        process_camp(camp)
 
 
 if __name__ == "__main__":

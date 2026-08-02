@@ -1,7 +1,7 @@
 import gzip
+import xml.etree.ElementTree as ET
 from typing import Any
 from xml.etree.ElementTree import Element
-import xml.etree.ElementTree as ET
 
 
 def strip_ns(elem):
@@ -61,7 +61,7 @@ def parse_transactions(root: Element[str]) -> list[Any]:
         description = description_elem.text if description_elem is not None else ""
 
         date_elem = trn.find("date-posted/date")
-        year = date_elem.text[:4] if date_elem is not None else None
+        year = date_elem.text[:4] if date_elem is not None else None  # type: ignore[index]
 
         if len(trn.findall("splits/split")) > 15:
             continue
@@ -76,7 +76,7 @@ def parse_transactions(root: Element[str]) -> list[Any]:
             acc_guid = acc_elem.text
             value = value_elem.text
 
-            num, denom = map(int, value.split("/"))
+            num, denom = map(int, value.split("/"))  # type: ignore[union-attr]
 
             memo_elem = sp.find("memo")
             memo = memo_elem.text if memo_elem is not None else ""
@@ -93,7 +93,7 @@ def parse_transactions(root: Element[str]) -> list[Any]:
     return transactions
 
 
-def parse_gnucash_xml(path):
+def parse_gnucash_xml(path) -> tuple[dict[Any, Any], list[Any]]:
     """Parse the Gnucash XML into accounts and transactions"""
     root = load_xml(path)
     strip_ns(root)

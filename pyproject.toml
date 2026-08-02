@@ -22,7 +22,7 @@ dependencies = [
 [project.scripts]
 process-enrollment = "traka_automation.enrollments.process_enrollment:main"
 build-declaration = "traka_automation.declaration.build_declaration:main"
-generate-kamp-overview = "traka_automation.financial_overview.generate_kamp_overview:main"
+generate-kamp-overview = "traka_automation.financial_overview.camp_overview_generator:main"
 
 [tool.uv]
 package = true
