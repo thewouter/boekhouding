@@ -39,19 +39,19 @@ stat -c %y /onedrive/conf/last_check
 cd /scratch
 if [ /onedrive/data/exchange_folder/last_boekhouding.gnucash -nt /onedrive/conf/last_check ]; then
     echo "Running camp overview generation code"
-    uv run generate-kamp-overview
+    uv run --frozen generate-kamp-overview
     RESYNC=true
 fi
 
 if [ /onedrive/data/exchange_folder/declaraties -nt /onedrive/conf/last_check ]; then
     echo "Running declaration processing code"
-    uv run build-declaration
+    uv run --frozen build-declaration
     RESYNC=true
 fi
 
 if [ /onedrive/data/exchange_folder/inschrijvingen -nt /onedrive/conf/last_check ]; then
     echo "Running new enrollment code"
-    uv run process-enrollment
+    uv run --frozen process-enrollment
     RESYNC=true
 fi
 

@@ -15,8 +15,13 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends fontconfig && \
+    apt-get install -y --no-install-recommends fontconfig locales && \
+    sed -i -e 's/# nl_NL.UTF-8 UTF-8/nl_NL.UTF-8 UTF-8/' /etc/locale.gen && \
+    dpkg-reconfigure --frontend=noninteractive locales && \
     rm -rf /var/lib/apt/lists/*
+
+ENV LANG=nl_NL.UTF-8
+ENV LC_ALL=nl_NL.UTF-8
 
 RUN mkdir -p /usr/local/share/fonts/custom
 
