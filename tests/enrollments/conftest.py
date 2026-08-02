@@ -10,7 +10,7 @@ from traka_automation.util.load_json import load_json
 
 
 @pytest.fixture
-def example_enrollment_json() -> str:
+def example_enrollment_json() -> dict:
     return json.loads("""{
       "$schema": "https://www.trapperskamp.com/schemas/signup.json",
       "type": "SignupForm",
@@ -81,9 +81,9 @@ def example_enrollment_json() -> str:
 
 
 @pytest.fixture
-def example_enrollment_web_form(example_enrollment_json: str) -> EnrollmentWebForm:
+def example_enrollment_web_form(example_enrollment_json: dict) -> EnrollmentWebForm:
     return EnrollmentWebForm.from_json(
-        load_json(example_enrollment_json), uuid="test-uuid"
+        example_enrollment_json, uuid="test-uuid"
     )
 
 
