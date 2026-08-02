@@ -1,33 +1,18 @@
-import gzip
-import xml.etree.ElementTree as ET
 from typing import Any
 from xml.etree.ElementTree import Element
 
+from traka_automation.util.load_xml import load_xml
 
-def strip_ns(elem):
+
+def strip_ns(elem: Element[Any]) -> None:
     """Remove XML namespaces in-place."""
     for el in elem.iter():
         if "}" in el.tag:
             el.tag = el.tag.split("}", 1)[1]
 
 
-def load_xml(path) -> Element[str]:
-    with open(path, "rb") as f:
-        magic = f.read(2)
-
-    if magic == b"\x1f\x8b":
-        with gzip.open(path, "rb") as f:
-            tree = ET.parse(f)
-            root = tree.getroot()
-    else:
-        with open(path, "rb") as f:
-            tree = ET.parse(f)
-            root = tree.getroot()
-    return root
-
-
 def parse_accounts(root: Element[str]) -> dict[Any, Any]:
-    # --- parse accounts ---
+    """parse the root tree into a dictionary of accounts."""
 
     accounts = {}
     for acc in root.findall(".//account"):
@@ -55,6 +40,7 @@ def parse_accounts(root: Element[str]) -> dict[Any, Any]:
 
 
 def parse_transactions(root: Element[str]) -> list[Any]:
+    """Convert the root tree into a list of transactions"""
     transactions = []
     for trn in root.findall(".//transaction"):
         description_elem = trn.find("description")

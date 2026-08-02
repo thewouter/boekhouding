@@ -26,6 +26,7 @@ def get_camp_overview(
 
 
 def find_camp_account(camp_name, account_type, accounts):
+    """Find the uuid of the camp account with the given name"""
     return next(
         guid
         for guid, acc in accounts.items()

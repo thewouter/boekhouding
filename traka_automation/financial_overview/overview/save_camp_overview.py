@@ -1,4 +1,5 @@
 def save_camp_overview(overview, filename):
+    """Save camp overview to a text file."""
     with open(filename, "w") as f:
         for post, items in overview.items():
             f.write(f"{post}:\n")
