@@ -1,10 +1,12 @@
 import json
 
-WHITESPACE_TRANSLATION = str.maketrans({
-    "\u00A0": " ",
-    "\u2007": " ",
-    "\u202F": " ",
-})
+WHITESPACE_TRANSLATION = str.maketrans(
+    {
+        "\u00a0": " ",
+        "\u2007": " ",
+        "\u202f": " ",
+    }
+)
 
 
 def load_json(path):
@@ -14,4 +16,3 @@ def load_json(path):
     text = text.translate(WHITESPACE_TRANSLATION)
     print(repr(text))
     return json.loads(text)
-

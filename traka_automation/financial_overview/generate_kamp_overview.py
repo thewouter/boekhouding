@@ -5,15 +5,16 @@ import sys
 import xml.etree.ElementTree as ET
 from datetime import UTC, datetime
 
-SAVE_LOCATION = '/onedrive/data/exchange_folder'
-CACHE_LOCATION = ''
+SAVE_LOCATION = "/onedrive/data/exchange_folder"
+CACHE_LOCATION = ""
 
 
 def strip_ns(elem):
     """Remove XML namespaces in-place."""
     for el in elem.iter():
-        if '}' in el.tag:
-            el.tag = el.tag.split('}', 1)[1]
+        if "}" in el.tag:
+            el.tag = el.tag.split("}", 1)[1]
+
 
 def parse_gnucash_xml(path):
     # --- handle gzip transparently ---
@@ -84,14 +85,15 @@ def parse_gnucash_xml(path):
             memo_elem = sp.find("memo")
             memo = memo_elem.text if memo_elem is not None else ""
 
-
-            transactions.append({
-                "account": acc_guid,
-                "amount": num / denom,
-                "memo": memo,
-                "description": description,
-                "year": year,
-            })
+            transactions.append(
+                {
+                    "account": acc_guid,
+                    "amount": num / denom,
+                    "memo": memo,
+                    "description": description,
+                    "year": year,
+                }
+            )
 
     return accounts, transactions
 
@@ -105,7 +107,7 @@ def generate_overview(camp_name: str, year=None):
     # copy file (same as before)
     shutil.copy(
         f"{SAVE_LOCATION}/last_boekhouding.gnucash",
-        f"{CACHE_LOCATION}/scratch/database.gnucash"
+        f"{CACHE_LOCATION}/scratch/database.gnucash",
     )
 
     accounts, transactions = parse_gnucash_xml(
@@ -114,6 +116,7 @@ def generate_overview(camp_name: str, year=None):
 
     # --- optional speedup: index by account ---
     from collections import defaultdict
+
     transactions_by_account = defaultdict(list)
     for t in transactions:
         transactions_by_account[t["account"]].append(t)
@@ -123,7 +126,8 @@ def generate_overview(camp_name: str, year=None):
 
         # find camp account
         camp_uuid = next(
-            guid for guid, acc in accounts.items()
+            guid
+            for guid, acc in accounts.items()
             if acc["name"] == camp_name and acc["type"] == type
         )
 
@@ -158,12 +162,19 @@ def generate_overview(camp_name: str, year=None):
 
     return posten
 
+
 def main():
 
-
     kampen = [
-        "Scoutdoor", "Eiffel Experience", "Extreem", "Jungle Adventure",
-        "Scoutakel", "Scoutakel - 2", "Mission Possible", "Geoscouten", "BBQ"
+        "Scoutdoor",
+        "Eiffel Experience",
+        "Extreem",
+        "Jungle Adventure",
+        "Scoutakel",
+        "Scoutakel - 2",
+        "Mission Possible",
+        "Geoscouten",
+        "BBQ",
     ]
 
     for kamp in kampen:
@@ -172,10 +183,13 @@ def main():
         with open(f"{SAVE_LOCATION}/kampoverzichten/overzicht_{kamp}.txt", "w") as f:
             for post, items in overview.items():
                 f.write(f"{post}:\n")
-                f.writelines(f"    {description}: {'' if amount >= 0 else '-'}€{abs(amount):0.2f}\n" for description, amount in items)
+                f.writelines(
+                    f"    {description}: {'' if amount >= 0 else '-'}€{abs(amount):0.2f}\n"
+                    for description, amount in items
+                )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     print(sys.argv)
     if len(sys.argv) == 2:
         SAVE_LOCATION = sys.argv[1]

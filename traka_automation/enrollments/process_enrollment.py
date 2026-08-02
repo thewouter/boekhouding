@@ -1,7 +1,15 @@
 import os
 
-from traka_automation.enrollments.enrollment.enrollment_web_form import EnrollmentWebForm
-from traka_automation.enrollments.enrollment.enrollment_form import generate_enrollment_form_and_save
+from traka_automation.enrollments.email_handler import (
+    generate_enrollment_email,
+    draft_email,
+)
+from traka_automation.enrollments.enrollment.enrollment_web_form import (
+    EnrollmentWebForm,
+)
+from traka_automation.enrollments.enrollment.enrollment_form import (
+    generate_enrollment_form_and_save,
+)
 from traka_automation.util.load_json import load_json
 
 
@@ -30,7 +38,7 @@ def generate_and_save_enrollment_forms(
 
 def load_new_enrollments():
     """Load all new enrollments into a list."""
-    new_enrollments : list[EnrollmentWebForm] = []
+    new_enrollments: list[EnrollmentWebForm] = []
     directory = "/onedrive/data/exchange_folder/inschrijvingen"
     for file in os.listdir(directory):
         filename = os.fsdecode(file)

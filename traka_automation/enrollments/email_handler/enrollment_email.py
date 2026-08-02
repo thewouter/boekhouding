@@ -2,7 +2,9 @@ from pathlib import Path
 
 from jinja2 import Environment, FileSystemLoader
 
-from traka_automation.enrollments.enrollment.enrollment_web_form import EnrollmentWebForm
+from traka_automation.enrollments.enrollment.enrollment_web_form import (
+    EnrollmentWebForm,
+)
 
 
 def generate_enrollment_email(enrollment_form: EnrollmentWebForm) -> str:

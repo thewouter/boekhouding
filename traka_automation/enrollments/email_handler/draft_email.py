@@ -24,18 +24,10 @@ def draft_email(mailbox: str, to_addresses: list[str], subject: str, body: str) 
 
     mail = {
         "subject": subject,
-        "body": {
-            "contentType": "HTML",
-            "content": body
-        },
+        "body": {"contentType": "HTML", "content": body},
         "toRecipients": [
-            {
-                "emailAddress": {
-                    "address": address
-                }
-            }
-            for address in to_addresses
-        ]
+            {"emailAddress": {"address": address}} for address in to_addresses
+        ],
     }
 
     response = requests.post(

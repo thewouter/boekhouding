@@ -3,12 +3,7 @@ import os
 from mollie.api.objects.payment_link import PaymentLink
 from pydantic import BaseModel, ConfigDict
 
-from traka_automation.enrollments.email_handler import (
-    draft_email,
-    generate_enrollment_email,
-)
 from traka_automation.enrollments.enrollment.camp import Camp
-from traka_automation.enrollments.enrollment.enrollment_form import generate_enrollment_form_and_save
 from traka_automation.enrollments.enrollment.participant import Participant
 from traka_automation.enrollments.mollie_connection.generate_mollie_payment_link import (
     generate_payment_link,
@@ -17,12 +12,15 @@ from traka_automation.enrollments.mollie_connection.generate_mollie_payment_link
 
 class EnrollmentWebForm(BaseModel):
     """A filled out enrollment form."""
+
     camp: Camp
     participants: list[Participant] = []
     uuid: str
     payment_link_cache: PaymentLink | None = None
 
-    model_config = ConfigDict(arbitrary_types_allowed=True) #  To prevent generating many payment links
+    model_config = ConfigDict(
+        arbitrary_types_allowed=True
+    )  #  To prevent generating many payment links
 
     @classmethod
     def from_json(cls, json_data: dict, filename) -> EnrollmentWebForm:
@@ -31,7 +29,12 @@ class EnrollmentWebForm(BaseModel):
         camp_price = json_data["activity"]["price"]
         camp_start_date = json_data["activity"]["startDate"]
         camp_end_date = json_data["activity"]["endDate"]
-        camp = Camp(name=camp_name, price=camp_price, start_date=camp_start_date, end_date=camp_end_date)
+        camp = Camp(
+            name=camp_name,
+            price=camp_price,
+            start_date=camp_start_date,
+            end_date=camp_end_date,
+        )
         uuid = filename.split(".")[0]
 
         participants = json_data["participants"]
@@ -60,7 +63,12 @@ class EnrollmentWebForm(BaseModel):
     def payment_link(self) -> PaymentLink:
         """Get the payment link for the Enrollment."""
         if self.payment_link_cache is None:
-            self.payment_link_cache = generate_payment_link(self)
+            self.payment_link_cache = generate_payment_link(
+                self.combined_names,
+                self.camp.name,
+                self.total_price,
+                self.camp.end_date,
+            )
             if self.payment_link_cache is None:
                 raise ValueError("Payment link not available")
         return self.payment_link_cache

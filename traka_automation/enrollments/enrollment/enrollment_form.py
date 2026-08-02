@@ -8,7 +8,9 @@ from traka_automation.enrollments.enrollment.participant import Participant
 
 def generate_docx_enrollment_form(participant: Participant) -> DocxTemplate:
     """Generate an enrollment form."""
-    doc = DocxTemplate(f"{Path(__file__).resolve().parent.parent}/templates/aanmeldformulier.docx")
+    doc = DocxTemplate(
+        f"{Path(__file__).resolve().parent.parent}/templates/aanmeldformulier.docx"
+    )
 
     context = {
         "camp": {
@@ -39,17 +41,19 @@ def generate_docx_enrollment_form(participant: Participant) -> DocxTemplate:
             "two": {
                 "text": participant.camp.cancellation_term_two.text,
                 "retainer": participant.camp.cancellation_term_two.retainer,
-            }
-        }
+            },
+        },
     }
 
     doc.render(context)
 
     return doc
 
+
 def save_enrollment_form(enrollment_form: DocxTemplate, filename: str) -> None:
     """Save the enrollment form to the given filename."""
     enrollment_form.save(filename=filename)
+
 
 def convert_docx_to_pdf(docx_path: str) -> None:
     """Convert the given docx file to PDF."""
@@ -58,7 +62,8 @@ def convert_docx_to_pdf(docx_path: str) -> None:
         [
             "soffice",
             "--headless",
-            "--convert-to", "pdf",
+            "--convert-to",
+            "pdf",
             str(docx_path),
             "--outdir",
             str(Path(docx_path).parent),
@@ -67,6 +72,7 @@ def convert_docx_to_pdf(docx_path: str) -> None:
         capture_output=True,
         text=True,
     )
+
 
 def generate_enrollment_form_and_save(filename, participant: Participant) -> None:
     """Generate an enrollment form and save it to the given filename as docx and PDF."""

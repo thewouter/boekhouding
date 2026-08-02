@@ -5,7 +5,8 @@ from traka_automation.enrollments.enrollment.camp import Camp
 
 class Participant(BaseModel):
     """A participant of a camp."""
-    #camp
+
+    # camp
     camp: Camp
 
     # personal details
@@ -58,5 +59,5 @@ class Participant(BaseModel):
             member_number=member_number,
             scouting_group=scouting_group,
             scouting_city=scouting_city,
-            age_group=age_group
+            age_group=age_group,
         )
