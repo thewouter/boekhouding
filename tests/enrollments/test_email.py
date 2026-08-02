@@ -10,7 +10,7 @@ def test_enrollment_email(example_enrollment_web_form: EnrollmentWebForm):
     """Test whether the enrollment email generation generates valid HTML5."""
     html = generate_enrollment_email(example_enrollment_web_form)
     html5parser = html5lib.HTMLParser(strict=True)
-    assert html5parser.parse(html)
+    html5parser.parse(html)
 
 
 def test_enroll_email_content_keywords(example_enrollment_web_form: EnrollmentWebForm):
