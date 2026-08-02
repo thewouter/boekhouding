@@ -1,5 +1,5 @@
 import locale
-from datetime import datetime, date
+from datetime import date, datetime
 
 
 def dutch_date(date_time: datetime | date):

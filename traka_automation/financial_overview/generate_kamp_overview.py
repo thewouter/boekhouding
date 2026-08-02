@@ -22,13 +22,13 @@ def parse_gnucash_xml(path):
         magic = f.read(2)
 
     if magic == b"\x1f\x8b":
-        f = gzip.open(path, "rb")
+        with gzip.open(path, "rb") as f:
+            tree = ET.parse(f)
+            root = tree.getroot()
     else:
-        f = open(path, "rb")
-
-    tree = ET.parse(f)
-    root = tree.getroot()
-    f.close()
+        with open(path, "rb") as f:
+            tree = ET.parse(f)
+            root = tree.getroot()
 
     # --- strip namespaces ---
     strip_ns(root)
@@ -102,7 +102,7 @@ def generate_overview(camp_name: str, year=None):
     if year is None:
         year = datetime.now(tz=UTC).year
 
-    posten = {}
+    posten: dict = {}
 
     # copy file (same as before)
     shutil.copy(

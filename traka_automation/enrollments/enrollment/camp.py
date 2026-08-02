@@ -1,7 +1,6 @@
 from datetime import datetime, timedelta
 
 from pydantic import BaseModel
-import locale
 
 from traka_automation.util.dutch_date import dutch_date
 
@@ -13,6 +12,10 @@ class CancellationTerm(BaseModel):
     @property
     def text_date(self):
         return dutch_date(self.date)
+
+    @property
+    def text_retainer(self):
+        return f"€{self.retainer:.2f}"
 
 
 CANCELLATION_INTERVAL_ONE = timedelta(days=60)

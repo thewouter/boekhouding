@@ -23,7 +23,7 @@ class EnrollmentWebForm(BaseModel):
     )  #  To prevent generating many payment links
 
     @classmethod
-    def from_json(cls, json_data: dict, filename) -> EnrollmentWebForm:
+    def from_json(cls, json_data: dict, uuid) -> EnrollmentWebForm:
         """Generate a new enrollment from JSON data and an uuid for traceability."""
         camp_name = json_data["activity"]["name"]
         camp_price = json_data["activity"]["price"]
@@ -35,7 +35,7 @@ class EnrollmentWebForm(BaseModel):
             start_date=camp_start_date,
             end_date=camp_end_date,
         )
-        uuid = filename.split(".")[0]
+        uuid = uuid.split(".")[0]
 
         participants = json_data["participants"]
         participant_list = []

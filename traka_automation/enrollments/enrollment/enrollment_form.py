@@ -38,11 +38,11 @@ def generate_docx_enrollment_form(participant: Participant) -> DocxTemplate:
         "payment_term": {
             "one": {
                 "text": participant.camp.cancellation_term_one.text_date,
-                "retainer": f"{participant.camp.cancellation_term_one.retainer:0.2f}",
+                "retainer": participant.camp.cancellation_term_one.text_retainer,
             },
             "two": {
                 "text": participant.camp.cancellation_term_two.text_date,
-                "retainer": f"{participant.camp.cancellation_term_two.retainer:0.2f}",
+                "retainer": participant.camp.cancellation_term_two.text_retainer,
             },
         },
     }

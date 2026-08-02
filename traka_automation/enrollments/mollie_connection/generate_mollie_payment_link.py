@@ -21,9 +21,9 @@ def generate_payment_link(
     name: str, camp: str, amount: float, end_date: datetime
 ) -> PaymentLink:
     """Get the payment link for the Enrollment through the Mollie API."""
-    mollie_client = get_mollie_client()
     if secrets_config["dev"]:
-        return DummyPaymentLink(client=mollie_client, data={})
+        return DummyPaymentLink(client=None, data={})
+    mollie_client = get_mollie_client()
     payment_link: PaymentLink = mollie_client.payment_links.create(
         {
             "description": f"Deelname van {name} aan {camp}.",

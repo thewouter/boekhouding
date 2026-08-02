@@ -13,7 +13,9 @@ dependencies = [
     "numpy>=2.5.1",
     "pillow>=12.3.0",
     "pydantic>=2.13.4",
+    "pydantic-settings>=2.14.2",
     "pyyaml>=6.0.3",
+    "types-pyyaml>=6.0.12.20260724",
     "uuid>=1.30",
 ]
 
@@ -30,6 +32,17 @@ include = ["traka_automation*"]
 
 [dependency-groups]
 dev = [
+    "html5lib>=1.1",
     "mypy>=2.3.0",
+    "prek>=0.4.11",
+    "pytest>=9.1.1",
     "ruff>=0.16.0",
 ]
+
+[tool.mypy]
+explicit_package_bases = true
+
+[[tool.mypy.overrides]]
+module = ["docxtpl.*", "msal.*"]
+follow_untyped_imports = true
+
