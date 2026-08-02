@@ -2,29 +2,11 @@ import json
 
 import pytest
 
-from traka_automation.util.config import secrets_config  # noqa: F401
-
-
-def pytest_sessionstart(session):
-    """
-    Called after the Session object has been created and
-    before performing collection and entering the run test loop.
-    """
-    secrets_config = {  # noqa: F811,F841
-        "ms_graph": {
-            "tenant_id": "your-tenant-id",
-            "client_id": "your-client-id",
-            "client_secret": "your-client-secret",
-        },
-        "mollie": {
-            "api_key": "xxxxx",
-        },
-        "dev": True,
-    }
+from traka_automation.enrollments.enrollment.enrollment_web_form import EnrollmentWebForm
 
 
 @pytest.fixture
-def enrollment_json():
+def example_enrollment_json():
     return json.loads("""{
       "$schema": "https://www.trapperskamp.com/schemas/signup.json",
       "type": "SignupForm",
@@ -92,3 +74,8 @@ def enrollment_json():
         "timestamp": "2025-11-05T17:35:17.123Z"
      }
     }""")
+
+
+@pytest.fixture
+def example_enrollment_web_form(example_enrollment_json) -> EnrollmentWebForm:
+    return EnrollmentWebForm.from_json(example_enrollment_json, uuid="test-uuid")
