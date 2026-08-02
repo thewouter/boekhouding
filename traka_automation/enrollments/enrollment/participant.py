@@ -30,8 +30,7 @@ class Participant(BaseModel):
 
     @classmethod
     def from_json(cls, json_data, camp):
-        camp = camp
-
+        """Load a participant from a json data dictionary."""
         name = json_data["name"]
         zip_code = json_data["zipCode"]
         city = json_data["city"]

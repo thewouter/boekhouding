@@ -1,17 +1,16 @@
 import os
 
 from traka_automation.enrollments.email_handler import (
-    generate_enrollment_email,
     draft_email,
-)
-from traka_automation.enrollments.enrollment.enrollment_web_form import (
-    EnrollmentWebForm,
+    generate_enrollment_email,
 )
 from traka_automation.enrollments.enrollment.enrollment_form import (
     generate_enrollment_form_and_save,
 )
+from traka_automation.enrollments.enrollment.enrollment_web_form import (
+    EnrollmentWebForm,
+)
 from traka_automation.util.load_json import load_json
-
 
 OUTPUT_FOLDER = "/onedrive/data/exchange_folder/inschrijfformulieren"
 

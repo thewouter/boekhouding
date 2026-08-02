@@ -2,7 +2,7 @@ import json
 
 import pytest
 
-from traka_automation.util.config import secrets_config
+from traka_automation.util.config import secrets_config  # noqa: F401
 
 
 def pytest_sessionstart(session):
@@ -10,7 +10,7 @@ def pytest_sessionstart(session):
     Called after the Session object has been created and
     before performing collection and entering the run test loop.
     """
-    secrets_config = {
+    secrets_config = { # noqa: F811,F841
         "ms_graph": {
             "tenant_id": "your-tenant-id",
             "client_id": "your-client-id",

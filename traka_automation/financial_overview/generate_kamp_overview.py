@@ -22,13 +22,14 @@ def parse_gnucash_xml(path):
         magic = f.read(2)
 
     if magic == b"\x1f\x8b":
-        f = gzip.open(path, "rb")
+        with gzip.open(path, "rb") as f:
+            tree = ET.parse(f)
+            root = tree.getroot()
     else:
-        f = open(path, "rb")
+        with open(path, "rb") as f:
+            tree = ET.parse(f)
+            root = tree.getroot()
 
-    tree = ET.parse(f)
-    root = tree.getroot()
-    f.close()
 
     # --- strip namespaces ---
     strip_ns(root)
