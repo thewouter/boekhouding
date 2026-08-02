@@ -23,6 +23,8 @@ def generate_enrollment_email(enrollment_form: EnrollmentWebForm) -> str:
         signature_name="Wouter van Harten",
         signature_title="Penningmeester Plusscoutskring Trapperskamp",
         logo_url="https://next.trapperskamp.com/processed_images/trapperskamp-vught.a83be22bfa0f671b.webp",
+        camp_start_date=enrollment_form.camp.start_date_string,
+        camp_end_date=enrollment_form.camp.end_date_string,
     )
 
     return html
