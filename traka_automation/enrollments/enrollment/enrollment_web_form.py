@@ -69,6 +69,10 @@ class EnrollmentWebForm(BaseModel):
         """Flatten the Enrollment to JSON."""
         return self.model_dump()
 
+    @property
+    def email_addresses(self) -> list[str]:
+        return [p.email_address for p in self.participants]
+
     def write_to_file(self, folder: str) -> None:
         """Write the Enrollment object to a file for further processing."""
         if self.filename is not None:
@@ -79,15 +83,10 @@ class EnrollmentWebForm(BaseModel):
 
     def send_email_enrollment_confirmation(self) -> None:
         """Send a confirmation email_handler to the (fist) enrollment participant."""
-        html = generate_enrollment_email(
-            name=self.combined_names,
-            camp=self.camp,
-            payment_link=self.payment_link.payment_link,
-            cost=self.amount
-        )
+        html = generate_enrollment_email(self)
         draft_email(
             mailbox="inschrijvingen@trapperskamp.com",  # info@ at a later time
-            to_address=self.email,
+            to_addresses=self.email_addresses,
             subject=f"Bevestiging inschrijving voor {self.camp}",
             body=html
         )

@@ -8,7 +8,7 @@ CLIENT_ID = secrets_config["ms_graph"]["client_id"]
 CLIENT_SECRET = secrets_config["ms_graph"]["client_secret"]
 
 
-def draft_email(mailbox: str, to_address: str, subject: str, body: str) -> None:
+def draft_email(mailbox: str, to_addresses: list[str], subject: str, body: str) -> None:
     """Draft an email_handler to the mailbox."""
     app = msal.ConfidentialClientApplication(
         CLIENT_ID,
@@ -31,9 +31,10 @@ def draft_email(mailbox: str, to_address: str, subject: str, body: str) -> None:
         "toRecipients": [
             {
                 "emailAddress": {
-                    "address": to_address
+                    "address": address
                 }
             }
+            for address in to_addresses
         ]
     }
 
