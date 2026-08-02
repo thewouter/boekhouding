@@ -2,11 +2,15 @@ import json
 
 import pytest
 
-from traka_automation.enrollments.enrollment.enrollment_web_form import EnrollmentWebForm
+from traka_automation.enrollments.enrollment.camp import Camp
+from traka_automation.enrollments.enrollment.enrollment_web_form import (
+    EnrollmentWebForm,
+)
+from traka_automation.util.load_json import load_json
 
 
 @pytest.fixture
-def example_enrollment_json():
+def example_enrollment_json() -> str:
     return json.loads("""{
       "$schema": "https://www.trapperskamp.com/schemas/signup.json",
       "type": "SignupForm",
@@ -77,5 +81,12 @@ def example_enrollment_json():
 
 
 @pytest.fixture
-def example_enrollment_web_form(example_enrollment_json) -> EnrollmentWebForm:
-    return EnrollmentWebForm.from_json(example_enrollment_json, uuid="test-uuid")
+def example_enrollment_web_form(example_enrollment_json: str) -> EnrollmentWebForm:
+    return EnrollmentWebForm.from_json(
+        load_json(example_enrollment_json), uuid="test-uuid"
+    )
+
+
+@pytest.fixture
+def example_camp(example_enrollment_web_form: EnrollmentWebForm) -> Camp:
+    return example_enrollment_web_form.camp

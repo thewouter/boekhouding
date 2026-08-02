@@ -1,4 +1,4 @@
-from traka_automation.util.config import secrets_config  # noqa: F401
+from traka_automation.util.config import secrets_config
 
 
 def pytest_sessionstart(session):
@@ -7,14 +7,16 @@ def pytest_sessionstart(session):
     before performing collection and entering the run test loop.
     """
     print("xxxx")
-    secrets_config.set_config({  # noqa: F811,F841
-        "ms_graph": {
-            "tenant_id": "your-tenant-id",
-            "client_id": "your-client-id",
-            "client_secret": "your-client-secret",
-        },
-        "mollie": {
-            "api_key": "xxxxx",
-        },
-        "dev": True,
-    })
+    secrets_config.set_config(
+        {
+            "ms_graph": {
+                "tenant_id": "your-tenant-id",
+                "client_id": "your-client-id",
+                "client_secret": "your-client-secret",
+            },
+            "mollie": {
+                "api_key": "xxxxx",
+            },
+            "dev": True,
+        }
+    )
