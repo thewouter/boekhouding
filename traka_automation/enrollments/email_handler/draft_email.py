@@ -36,7 +36,7 @@ def draft_email(mailbox: str, to_addresses: list[str], subject: str, body: str) 
             "Authorization": f"Bearer {access_token}",
             "Content-Type": "application/json",
         },
-        json=mail,
+        json=mail,  # type: ignore[arg-type]
     )
 
     response.raise_for_status()

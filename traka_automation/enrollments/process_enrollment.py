@@ -35,7 +35,7 @@ def generate_and_save_enrollment_forms(
         generate_enrollment_form_and_save(filename, participant)
 
 
-def load_new_enrollments():
+def load_new_enrollments() -> list[EnrollmentWebForm]:
     """Load all new enrollments into a list."""
     new_enrollments: list[EnrollmentWebForm] = []
     directory = "/onedrive/data/exchange_folder/inschrijvingen"

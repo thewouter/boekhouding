@@ -30,7 +30,6 @@ def parse_gnucash_xml(path):
             tree = ET.parse(f)
             root = tree.getroot()
 
-
     # --- strip namespaces ---
     strip_ns(root)
 
@@ -103,7 +102,7 @@ def generate_overview(camp_name: str, year=None):
     if year is None:
         year = datetime.now(tz=UTC).year
 
-    posten = {}
+    posten: dict = {}
 
     # copy file (same as before)
     shutil.copy(

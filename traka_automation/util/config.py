@@ -6,7 +6,7 @@ DEFAULT_SECRETS_FILE = "/onedrive/conf/secrets.yaml"
 class Config:
     """Class to hold the configuration.
 
-    It lazy loads the secrets file. """
+    It lazy loads the secrets file."""
 
     config: dict | None = None
 

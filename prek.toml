@@ -10,3 +10,13 @@ hooks = [
         id = "ruff-format"
     }
 ]
+
+[[repos]]
+repo = "https://github.com/pre-commit/mirrors-mypy"
+rev = "v2.3.0"
+hooks = [
+    {
+        id = "mypy",
+        additional_dependencies = ["types-PyYAML>=6.0.12.20260724", "types-requests>=2.31.0.20260724", "types-PySocks>=1.7.0.20260724"]
+    }
+]
