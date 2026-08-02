@@ -9,14 +9,12 @@ from traka_automation.financial_overview.parser.parse_gnucash_xml import (
 )
 
 
-
-
 def test_parse_gnucash_xml(gnucash_xml_location: str):
     accounts, transactions = parse_gnucash_xml(gnucash_xml_location)
     assert isinstance(accounts, dict)
     assert len(accounts) == 213
 
-    assert accounts[list(accounts.keys())[0]] == {
+    assert accounts[next(iter(accounts.keys()))] == {
         "name": "Root Account",
         "parent": None,
         "type": "ROOT",
@@ -32,6 +30,7 @@ def test_parse_gnucash_xml(gnucash_xml_location: str):
         "year": "2025",
     }
 
+
 def test_generate_overview(example_camp: str, gnucash_xml_location: str):
     accounts, transactions = prepare_gnucash_xml(gnucash_xml_location)
     overview = get_camp_overview(
@@ -39,7 +38,7 @@ def test_generate_overview(example_camp: str, gnucash_xml_location: str):
     )
     assert isinstance(overview, dict)
     assert len(overview) == 8
-    assert overview[list(overview.keys())[0]] == [
+    assert overview[next(iter(overview.keys()))] == [
         ("Voedsel uitzetweekeind (5/11 pers) (Niels Bloemendaal)", -69.35),
         (
             "Huur Ferschweiler uitzetweekend overnachtingen  (Ortsgemeinde Ferschweiler)",
