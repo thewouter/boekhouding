@@ -10,6 +10,7 @@ from traka_automation.enrollments.enrollment.enrollment_form import (
 from traka_automation.enrollments.enrollment.enrollment_web_form import (
     EnrollmentWebForm,
 )
+from traka_automation.util.config import secrets_config
 from traka_automation.util.load_json import load_json
 
 OUTPUT_FOLDER = "/onedrive/data/exchange_folder/inschrijfformulieren"
@@ -18,6 +19,8 @@ OUTPUT_FOLDER = "/onedrive/data/exchange_folder/inschrijfformulieren"
 def send_email_enrollment_confirmation(enrollment_web_form: EnrollmentWebForm) -> None:
     """Send a confirmation email_handler to the (fist) enrollment participant."""
     html = generate_enrollment_email(enrollment_web_form)
+    if secrets_config["dev"]:
+        return
     draft_email(
         mailbox="inschrijvingen@trapperskamp.com",  # info@ at a later time
         to_addresses=enrollment_web_form.email_addresses,
