@@ -1,3 +1,5 @@
+from datetime import date
+
 from pydantic import BaseModel
 
 from traka_automation.enrollments.enrollment.camp import Camp
@@ -14,7 +16,7 @@ class Participant(BaseModel):
     zip_code: str
     address: str
     city: str
-    birth_date: str
+    birth_date: date
     email_address: str
     phone: str
     backup_email_address: str
@@ -34,7 +36,7 @@ class Participant(BaseModel):
         zip_code = json_data["zipCode"]
         city = json_data["city"]
         address = json_data["address"]
-        birth_date = json_data["birthDate"]
+        birth_date = date.fromisoformat(json_data["birthDate"])
         email_address = json_data["emailAddress"]
         phone = json_data["telephoneMobile"]
         backup_email_address = json_data["backupEmailAddress"]

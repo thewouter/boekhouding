@@ -4,6 +4,7 @@ from pathlib import Path
 from docxtpl import DocxTemplate
 
 from traka_automation.enrollments.enrollment.participant import Participant
+from traka_automation.util.dutch_date import dutch_date
 
 
 def generate_docx_enrollment_form(participant: Participant) -> DocxTemplate:
@@ -23,7 +24,7 @@ def generate_docx_enrollment_form(participant: Participant) -> DocxTemplate:
             "name": participant.name,
             "address": participant.address,
             "city": participant.city,
-            "birth_date": participant.birth_date,
+            "birth_date": dutch_date(participant.birth_date),
             "email_address": participant.email_address,
             "phone": participant.phone,
             "backup_email_address": participant.backup_email_address,
@@ -35,11 +36,11 @@ def generate_docx_enrollment_form(participant: Participant) -> DocxTemplate:
         },
         "payment_term": {
             "one": {
-                "text": participant.camp.cancellation_term_one.text,
+                "text": participant.camp.cancellation_term_one.text_date,
                 "retainer": participant.camp.cancellation_term_one.retainer,
             },
             "two": {
-                "text": participant.camp.cancellation_term_two.text,
+                "text": participant.camp.cancellation_term_two.text_date,
                 "retainer": participant.camp.cancellation_term_two.retainer,
             },
         },

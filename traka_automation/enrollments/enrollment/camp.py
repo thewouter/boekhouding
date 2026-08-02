@@ -3,10 +3,16 @@ from datetime import datetime, timedelta
 from pydantic import BaseModel
 import locale
 
+from traka_automation.util.dutch_date import dutch_date
+
 
 class CancellationTerm(BaseModel):
     date: datetime
     retainer: float
+
+    @property
+    def text_date(self):
+        return dutch_date(self.date)
 
 
 CANCELLATION_INTERVAL_ONE = timedelta(days=60)
@@ -23,13 +29,11 @@ class Camp(BaseModel):
 
     @property
     def start_date_string(self):
-        locale.setlocale(locale.LC_TIME, "nl_NL")  # Dutch dates
-        return self.start_date.strftime("%-d %B %Y")
+        return dutch_date(self.start_date)
 
     @property
     def end_date_string(self):
-        locale.setlocale(locale.LC_TIME, "nl_NL")  # Dutch dates
-        return self.end_date.strftime("%-d %B %Y")
+        return dutch_date(self.end_date)
 
     @property
     def cancellation_term_one(self):
