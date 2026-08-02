@@ -1,4 +1,3 @@
-import csv
 import shutil
 from collections import defaultdict
 from datetime import datetime, UTC
@@ -38,18 +37,7 @@ def generate_overview(camp_name: str, year=None):
             type, accounts, camp_name, posten, transactions_by_account, year
         )
 
-    write_to_csv(camp_name, year, posten)
     return posten
-
-
-def write_to_csv(camp_name: str, year: int, posten: dict):
-    """Write overview to a csv file"""
-    with open(f"{camp_name}_{year}.csv", "w") as f:
-        writer = csv.writer(f, delimiter=";")
-        for post, values in posten.items():
-            writer.writerow([post, "", ""])
-            for value in values:
-                writer.writerow(["", value[0], value[1]])
 
 
 def handle_expense_income(
