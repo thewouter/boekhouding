@@ -34,9 +34,9 @@ include = ["traka_automation*"]
 dev = [
     "html5lib>=1.1",
     "mypy>=2.3.0",
-    "prek>=0.4.11",
+    "prek>=0.4.12",
     "pytest>=9.1.1",
-    "ruff>=0.16.0",
+    "ruff>=0.16.1",
 ]
 
 [tool.mypy]
