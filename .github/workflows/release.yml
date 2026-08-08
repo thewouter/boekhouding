@@ -27,10 +27,18 @@ jobs:
       - test
     runs-on: ubuntu-latest
     steps:
+      - name: Generate bot token
+        id: bot-token
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ secrets.RELEASE_BOT_APP_ID }}
+          private-key: ${{ secrets.RELEASE_BOT_PRIVATE_KEY }}
+
       - name: Checkout repository
         uses: actions/checkout@v6
         with:
           fetch-depth: 0
+          token: ${{ steps.bot-token.outputs.token }}
 
       - name: Install uv and setup python
         uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b # v8.1.0
