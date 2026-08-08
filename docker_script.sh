@@ -66,7 +66,7 @@ fi
 #Finally, we update the last_check file to reflect the current time we checked if it was older than the boekhouding file
 echo "---------------- UPDATING CHECK FILES ---------------"
 
-CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+CURRENT_BRANCH=$(/usr/sbin/gosu "${oduser}" git rev-parse --abbrev-ref HEAD)
 if [ "$CURRENT_BRANCH" = "production" ]; then
     echo "On production branch, updating last_check file"
     touch /onedrive/conf/last_check
