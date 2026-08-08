@@ -19,6 +19,8 @@ permissions:
 jobs:
   test:
     uses: ./.github/workflows/pytest.yml
+  prek:
+    uses: ./.github/workflows/prek.yml
   release:
     runs-on: ubuntu-latest
     steps:
