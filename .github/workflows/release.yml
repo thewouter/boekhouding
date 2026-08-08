@@ -77,9 +77,13 @@ jobs:
         env:
           VERSION_BUMP: ${{ inputs.version_bump }}
 
+      - name: Regenerate lock file
+        run: uv sync --all-extras --group dev
+
       - name: Commit version bump
         run: |
           git add pyproject.toml
+          git add uv.lock
           git commit -m "Bump version to v${{ steps.bump.outputs.version }}"
           git push origin main
 
