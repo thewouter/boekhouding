@@ -30,12 +30,14 @@ def generate_docx_enrollment_form(participant: Participant) -> DocxTemplate:
             "phone": participant.phone,
             "backup_email_address": participant.backup_email_address,
             "backup_phone": participant.backup_phone,
+            "backup_name": participant.backup_name,
             "member_number": participant.member_number,
             "scouting_group": participant.scouting_group,
             "scouting_city": participant.scouting_city,
             "age_group": participant.age_group,
+            "dietary_restrictions": participant.dietary_restrictions,
         },
-        "payment_term": {
+        "cancellation_term": {
             "one": {
                 "text": participant.camp.cancellation_term_one.text_date,
                 "retainer": participant.camp.cancellation_term_one.text_retainer,

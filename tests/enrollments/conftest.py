@@ -31,6 +31,9 @@ def example_enrollment_json() -> dict:
           "zipCode": "1234 AB",
           "city": "Voorbeeldstad",
           "telephoneMobile": "06-12345678",
+          "dietaryRestrictions": "Ik mag geen rijst op woensdagen",
+          "backupName": "Papa of Mama",
+          "photo": "fotodieiknetgenomenheb.jpg",
           "backupPhone": "06-12345688",
           "backupEmailAddress": "backup1@test.nl",
           "membership": {
@@ -53,6 +56,9 @@ def example_enrollment_json() -> dict:
           "zipCode": "1234 AC",
           "city": "Voorbeeldstad",
           "telephoneMobile": "06-12345678",
+          "dietaryRestrictions": "Ik mag geen rijst op dinsdagen",
+          "backupName": "Mijn echtgenoot of echtgenote",
+          "photo": "fotodieiknetgenomenheb.jpg",
           "backupPhone": "06-12345688",
           "backupEmailAddress": "backup1@test.nl",
           "membership": {
