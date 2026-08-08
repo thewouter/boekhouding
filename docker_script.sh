@@ -71,7 +71,7 @@ if [ "$CURRENT_BRANCH" = "production" ]; then
     echo "On production branch, updating last_check file"
     touch /onedrive/conf/last_check
     echo "On production branch, checking for updates"
-    git pull
+    /usr/sbin/gosu "${oduser}" git pull
 else
     echo "Not on production branch, skipping last_check update and git pull"
 fi
