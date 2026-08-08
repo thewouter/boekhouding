@@ -2,7 +2,7 @@ import sys
 from datetime import UTC, datetime
 
 from traka_automation.financial_overview.overview.generate_overview import (
-    generate_overview,
+    generate_overview, prepare_gnucash_xml,
 )
 from traka_automation.financial_overview.overview.save_camp_overview import (
     save_camp_overview,
@@ -26,13 +26,14 @@ CAMPS = [
 
 def main():
     copy_gnucash_xml_to_cache_location()
+    accounts, transactions = prepare_gnucash_xml()
     for camp in CAMPS:
-        process_camp(camp)
+        process_camp(camp, accounts, transactions)
 
 
-def process_camp(camp: str):
+def process_camp(camp: str, accounts, transactions, year=None):
     """Process a single camp and save the overview to a file."""
-    overview = generate_overview(camp, datetime.now(UTC).year)
+    overview = generate_overview(camp, accounts, transactions, year=year)
     save_camp_overview(
         overview, f"{SAVE_LOCATION}/kampoverzichten/overzicht_{camp}.txt"
     )
