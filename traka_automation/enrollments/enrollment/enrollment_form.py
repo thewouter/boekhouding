@@ -37,7 +37,7 @@ def generate_docx_enrollment_form(participant: Participant) -> DocxTemplate:
             "age_group": participant.age_group,
             "dietary_restrictions": participant.dietary_restrictions,
         },
-        "payment_term": {
+        "cancellation_terms": {
             "one": {
                 "text": participant.camp.cancellation_term_one.text_date,
                 "retainer": participant.camp.cancellation_term_one.text_retainer,
