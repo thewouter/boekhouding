@@ -1,8 +1,8 @@
 import sys
-from datetime import UTC, datetime
 
 from traka_automation.financial_overview.overview.generate_overview import (
-    generate_overview, prepare_gnucash_xml,
+    generate_overview,
+    prepare_gnucash_xml,
 )
 from traka_automation.financial_overview.overview.save_camp_overview import (
     save_camp_overview,
