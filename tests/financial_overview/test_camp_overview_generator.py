@@ -21,29 +21,21 @@ def test_parse_gnucash_xml(gnucash_xml_location: str):
     }
 
     assert isinstance(transactions, list)
-    assert len(transactions) == 3572
+    assert len(transactions) == 12
     assert transactions[0] == {
         "account": "d13e8ce798cb41ec90fc81d7aa3c14e9",
-        "amount": 378.69,
-        "description": "Openingsbalans Betaalrekening",
+        "amount": 50000.0,
         "memo": "",
-        "year": "2025",
+        "description": "Test test",
+        "year": "2026",
     }
 
 
 def test_generate_overview(example_camp: str, gnucash_xml_location: str):
     accounts, transactions = prepare_gnucash_xml(gnucash_xml_location)
     overview = get_camp_overview(
-        accounts=accounts, camp_name=example_camp, transactions=transactions, year=2025
+        accounts=accounts, camp_name=example_camp, transactions=transactions, year=2026
     )
     assert isinstance(overview, dict)
     assert len(overview) == 8
-    assert overview[next(iter(overview.keys()))] == [
-        ("Voedsel uitzetweekeind (5/11 pers) (Niels Bloemendaal)", -69.35),
-        (
-            "Huur Ferschweiler uitzetweekend overnachtingen  (Ortsgemeinde Ferschweiler)",
-            -42.0,
-        ),
-        ("Huur Ferschweiler uitzetweekend gebouw (Ortsgemeinde Ferschweiler)", -17.5),
-        ("Brandstof uitzetweekend Camiela (Camiela Jonker)", -42.61),
-    ]
+    assert overview[next(iter(overview.keys()))] == [(" (Test test - 2)", -2500.0)]

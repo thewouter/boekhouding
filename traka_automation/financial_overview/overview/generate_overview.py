@@ -24,10 +24,9 @@ def prepare_gnucash_xml(filename: str = f"{CACHE_LOCATION}/scratch/database.gnuc
     return accounts, transactions_by_account
 
 
-def generate_overview(camp_name: str, year=None):
+def generate_overview(camp_name: str, accounts, transactions, year=None):
     """Generate the overview for a single camp."""
     if year is None:
         year = datetime.now(tz=UTC).year
 
-    accounts, transactions = prepare_gnucash_xml()
     return get_camp_overview(accounts, camp_name, transactions, year)
