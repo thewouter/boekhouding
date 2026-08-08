@@ -8,7 +8,7 @@ CLIENT_ID = secrets_config["ms_graph"]["client_id"]
 CLIENT_SECRET = secrets_config["ms_graph"]["client_secret"]
 
 
-def draft_email(mailbox: str, to_address: str, subject: str, body: str) -> None:
+def draft_email(mailbox: str, to_addresses: list[str], subject: str, body: str) -> None:
     """Draft an email_handler to the mailbox."""
     app = msal.ConfidentialClientApplication(
         CLIENT_ID,
@@ -24,17 +24,10 @@ def draft_email(mailbox: str, to_address: str, subject: str, body: str) -> None:
 
     mail = {
         "subject": subject,
-        "body": {
-            "contentType": "HTML",
-            "content": body
-        },
+        "body": {"contentType": "HTML", "content": body},
         "toRecipients": [
-            {
-                "emailAddress": {
-                    "address": to_address
-                }
-            }
-        ]
+            {"emailAddress": {"address": address}} for address in to_addresses
+        ],
     }
 
     response = requests.post(
@@ -43,7 +36,7 @@ def draft_email(mailbox: str, to_address: str, subject: str, body: str) -> None:
             "Authorization": f"Bearer {access_token}",
             "Content-Type": "application/json",
         },
-        json=mail,
+        json=mail,  # type: ignore[arg-type]
     )
 
     response.raise_for_status()

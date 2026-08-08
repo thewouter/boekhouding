@@ -1,0 +1,45 @@
+name: Python test
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.14"]
+
+    steps:
+      - uses: actions/checkout@v6
+      - name: Install uv and setup python
+        uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b # v8.1.0
+        with:
+          # Install a specific version of uv.
+          version: "0.12.1"
+          python-version: ${{ matrix.python-version }}
+          enable-cache: true
+
+      - name: Install Dutch language
+        run: |
+          sudo apt-get install -y --no-install-recommends fontconfig locales
+          sudo sed -i -e 's/# nl_NL.UTF-8 UTF-8/nl_NL.UTF-8 UTF-8/' /etc/locale.gen
+          sudo dpkg-reconfigure --frontend=noninteractive locales
+
+      - name: Install libreoffice
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends libreoffice
+
+      - name: Install the project
+        run: uv sync --locked --all-extras --group dev
+
+      - name: Run tests
+        run: uv run pytest tests

@@ -1,6 +1,6 @@
 [project]
 name = "boekhouding"
-version = "0.1.2"
+version = "0.2.0"
 description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.14"
@@ -10,16 +10,19 @@ dependencies = [
     "jsonschema>=4.26.0",
     "mollie-api-python>=4.0.0",
     "msal>=1.37.0",
+    "numpy>=2.5.1",
     "pillow>=12.3.0",
     "pydantic>=2.13.4",
+    "pydantic-settings>=2.14.2",
     "pyyaml>=6.0.3",
+    "types-pyyaml>=6.0.12.20260724",
     "uuid>=1.30",
 ]
 
 [project.scripts]
 process-enrollment = "traka_automation.enrollments.process_enrollment:main"
 build-declaration = "traka_automation.declaration.build_declaration:main"
-generate-kamp-overview = "traka_automation.financial_overview.generate_kamp_overview:main"
+generate-kamp-overview = "traka_automation.financial_overview.camp_overview_generator:main"
 
 [tool.uv]
 package = true
@@ -29,6 +32,17 @@ include = ["traka_automation*"]
 
 [dependency-groups]
 dev = [
+    "html5lib>=1.1",
     "mypy>=2.3.0",
-    "ruff>=0.16.0",
+    "prek>=0.4.12",
+    "pytest>=9.1.1",
+    "ruff>=0.16.1",
 ]
+
+[tool.mypy]
+explicit_package_bases = true
+
+[[tool.mypy.overrides]]
+module = ["docxtpl.*", "msal.*"]
+follow_untyped_imports = true
+

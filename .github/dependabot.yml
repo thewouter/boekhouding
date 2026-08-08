@@ -9,3 +9,10 @@ updates:
     directory: "/" # Location of package manifests
     schedule:
       interval: "weekly"
+    groups:
+      python:
+        applies-to: version-updates
+        update-types:
+          - "major"
+          - "minor"
+          - "patch"
