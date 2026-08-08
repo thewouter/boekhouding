@@ -20,7 +20,9 @@ def test_convert_office_document_to_pdf_calls_libreoffice(monkeypatch):
         assert check is False
         return CompletedProcess(command, 0, stdout="ok", stderr="")
 
-    monkeypatch.setattr("traka_automation.declaration.conversion.subprocess.run", fake_run)
+    monkeypatch.setattr(
+        "traka_automation.declaration.conversion.subprocess.run", fake_run
+    )
 
     file_path = Path("/tmp/bonnen.xlsx")
     output_dir = Path("/tmp/output")
@@ -44,7 +46,9 @@ def test_convert_office_document_to_pdf_raises_on_failure(monkeypatch):
     def fake_run(command: list[str], capture_output: bool, text: bool, check: bool):
         return CompletedProcess(command, 1, stdout="", stderr="broken")
 
-    monkeypatch.setattr("traka_automation.declaration.conversion.subprocess.run", fake_run)
+    monkeypatch.setattr(
+        "traka_automation.declaration.conversion.subprocess.run", fake_run
+    )
 
     try:
         convert_office_document_to_pdf(Path("/tmp/bon.docx"), Path("/tmp"))

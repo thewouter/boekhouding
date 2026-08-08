@@ -20,7 +20,9 @@ def test_process_all_declarations_processes_directories_in_sorted_order(
         (declarations_dir / directory_name).mkdir()
     (declarations_dir / "not-a-dir.txt").write_text("ignored", encoding="utf-8")
 
-    def fake_process_declaration(declaration_dir: Path, passed_output_dir: Path) -> None:
+    def fake_process_declaration(
+        declaration_dir: Path, passed_output_dir: Path
+    ) -> None:
         processed.append((declaration_dir, passed_output_dir))
 
     monkeypatch.setattr(
@@ -41,7 +43,9 @@ def test_process_declaration_writes_pdf_and_cleans_up(monkeypatch, tmp_path: Pat
     declaration_dir.mkdir()
     output_dir = tmp_path / "out"
     output_dir.mkdir()
-    (declaration_dir / "data.json").write_text(json.dumps({"name": "ignored"}), encoding="utf-8")
+    (declaration_dir / "data.json").write_text(
+        json.dumps({"name": "ignored"}), encoding="utf-8"
+    )
 
     data = {
         "name": "Alice",
@@ -61,7 +65,9 @@ def test_process_declaration_writes_pdf_and_cleans_up(monkeypatch, tmp_path: Pat
         (passed_output_dir / f"{filename}.log").write_text("log", encoding="utf-8")
         (passed_output_dir / f"{filename}.pdf").write_text("pdf", encoding="utf-8")
 
-    monkeypatch.setattr("traka_automation.declaration.processor.load_json", lambda _: data)
+    monkeypatch.setattr(
+        "traka_automation.declaration.processor.load_json", lambda _: data
+    )
     monkeypatch.setattr(
         "traka_automation.declaration.processor.collect_receipt_pdfs",
         lambda _: pdf_paths,

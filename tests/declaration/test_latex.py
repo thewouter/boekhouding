@@ -31,8 +31,10 @@ def test_build_receipt_include_commands_renders_all_pdfs():
     pdf_paths = [Path("/tmp/a.pdf"), Path("/tmp/b.pdf")]
 
     assert build_receipt_include_commands(pdf_paths) == (
-        r"\includepdf[pages={1-},scale=0.75]{/tmp/a.pdf}" "\n"
-        r"\includepdf[pages={1-},scale=0.75]{/tmp/b.pdf}" "\n"
+        r"\includepdf[pages={1-},scale=0.75]{/tmp/a.pdf}"
+        "\n"
+        r"\includepdf[pages={1-},scale=0.75]{/tmp/b.pdf}"
+        "\n"
     )
 
 
@@ -52,7 +54,9 @@ def test_render_declaration_substitutes_and_escapes_fields(monkeypatch):
         "camp": "Camp~Name",
     }
 
-    monkeypatch.setattr("traka_automation.declaration.latex.load_template", lambda: template)
+    monkeypatch.setattr(
+        "traka_automation.declaration.latex.load_template", lambda: template
+    )
 
     rendered = render_declaration(data, "PDFS")
 

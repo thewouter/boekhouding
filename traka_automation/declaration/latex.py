@@ -45,7 +45,9 @@ def tex_escape(text: str) -> str:
         ">": r"\textgreater{}",
     }
     regex = re.compile(
-        "|".join(re.escape(str(key)) for key in sorted(conv, key=lambda item: -len(item)))
+        "|".join(
+            re.escape(str(key)) for key in sorted(conv, key=lambda item: -len(item))
+        )
     )
     return regex.sub(lambda match: conv[match.group()], str(text))
 
