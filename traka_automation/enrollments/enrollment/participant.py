@@ -19,6 +19,9 @@ class Participant(BaseModel):
     birth_date: date
     email_address: str
     phone: str
+    dietary_restrictions: str
+    photo: str
+    backup_name: str
     backup_email_address: str
     backup_phone: str
 
@@ -38,6 +41,10 @@ class Participant(BaseModel):
         birth_date = date.fromisoformat(json_data["birthDate"])
         email_address = json_data["emailAddress"]
         phone = json_data["telephoneMobile"]
+        dietary_restrictions = json_data["dietaryRestrictions"]
+        photo = json_data["photo"]
+
+        backup_name = json_data["backupName"]
         backup_email_address = json_data["backupEmailAddress"]
         backup_phone = json_data["backupPhone"]
 
@@ -55,6 +62,9 @@ class Participant(BaseModel):
             birth_date=birth_date,
             email_address=email_address,
             phone=phone,
+            dietary_restrictions=dietary_restrictions,
+            photo=photo,
+            backup_name=backup_name,
             backup_email_address=backup_email_address,
             backup_phone=backup_phone,
             member_number=member_number,
