@@ -17,6 +17,8 @@ permissions:
   contents: write
 
 jobs:
+  test:
+    uses: ./.github/workflows/pytest.yml
   release:
     runs-on: ubuntu-latest
     steps:
