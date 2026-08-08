@@ -2,11 +2,11 @@ import re
 import subprocess
 from pathlib import Path
 
-TEMPLATE_PATH = Path(__file__).with_name("template.tex")
+TEMPLATE_PATH = Path(__file__).parent / "templates" / "declaration_form_template.tex"
 FIELD_MAPPINGS = {
     "{{ name }}": "name",
     "{{ cost }}": "cost",
-    "{{ IBAN }}": "IBAN:",
+    "{{ IBAN }}": "IBAN",
     "{{ specification }}": "specification",
     "{{ description }}": "description",
     "{{ comments }}": "comments",
