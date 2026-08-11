@@ -22,7 +22,6 @@ class Config:
         return self.config[item]
 
     def set_config(self, config: dict):
-        print(f"setting config to {config}")
         self.config = config
 
 

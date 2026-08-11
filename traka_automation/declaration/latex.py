@@ -6,7 +6,7 @@ TEMPLATE_PATH = Path(__file__).parent / "templates" / "declaration_form_template
 FIELD_MAPPINGS = {
     "{{ name }}": "name",
     "{{ cost }}": "cost",
-    "{{ IBAN }}": "IBAN",
+    "{{ IBAN }}": "IBAN:",
     "{{ specification }}": "specification",
     "{{ description }}": "description",
     "{{ comments }}": "comments",

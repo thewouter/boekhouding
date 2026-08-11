@@ -46,7 +46,7 @@ def test_render_declaration_substitutes_and_escapes_fields(monkeypatch):
     data = {
         "name": "A&B",
         "cost": "12_50",
-        "IBAN": "NL00BANK0123",
+        "IBAN:": "NL00BANK0123",
         "specification": "Spec%ial",
         "description": "Desc#ription",
         "comments": r"Contains\slash",
