@@ -67,7 +67,7 @@ wheels = [
 
 [[package]]
 name = "boekhouding"
-version = "0.2.6"
+version = "0.2.7"
 source = { editable = "." }
 dependencies = [
     { name = "docxtpl" },
