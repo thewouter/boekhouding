@@ -2,7 +2,7 @@ from datetime import date
 
 from pydantic import BaseModel
 
-from traka_automation.enrollments.enrollment.camp import Camp
+from traka_automation.enrollments.models.camp import Camp
 
 
 class Participant(BaseModel):

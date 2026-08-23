@@ -39,5 +39,4 @@ RUN cd /scratch && \
     /bin/uv sync
 
 
-#ENTRYPOINT ["/scratch/docker_script.sh"]
-#ENTRYPOINT ["/bin/bash"]
+ENTRYPOINT ["/scratch/docker_script.sh"]
