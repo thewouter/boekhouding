@@ -2,8 +2,8 @@ import json
 
 import pytest
 
-from traka_automation.enrollments.models.camp import Camp
-from traka_automation.enrollments.models.enrollment_web_form import (
+from traka_automation.enrollments.models import Camp
+from traka_automation.enrollments.models import (
     EnrollmentWebForm,
 )
 
