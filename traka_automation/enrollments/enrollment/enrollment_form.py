@@ -3,7 +3,7 @@ from pathlib import Path
 
 from docxtpl import DocxTemplate
 
-from traka_automation.enrollments.models.participant import Participant
+from traka_automation.enrollments.models import Participant
 from traka_automation.util.dutch_date import dutch_date
 
 
