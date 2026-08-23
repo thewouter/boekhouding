@@ -33,7 +33,7 @@ def example_enrollment_json() -> dict:
           "telephoneMobile": "06-12345678",
           "dietaryRestrictions": "Ik mag geen rijst op woensdagen",
           "backupName": "Papa of Mama",
-          "photo": "fotodieiknetgenomenheb.jpg",
+          "photo": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAACXBIWXMAAAsSAAALEgHS3X78AAAARElEQVQIHWM8zRn3/wb7U4aoDzYMTAyMDIwHuMP/7+K5zPCb6Q/DP4b/DCx6P+QY7rO9Ykh4bw8WYPzP0PAfJANSDgIAgkYYUh06X6cAAAAASUVORK5CYII==",
           "backupPhone": "06-12345688",
           "backupEmailAddress": "backup1@test.nl",
           "membership": {
@@ -58,7 +58,6 @@ def example_enrollment_json() -> dict:
           "telephoneMobile": "06-12345678",
           "dietaryRestrictions": "Ik mag geen rijst op dinsdagen",
           "backupName": "Mijn echtgenoot of echtgenote",
-          "photo": "fotodieiknetgenomenheb.jpg",
           "backupPhone": "06-12345688",
           "backupEmailAddress": "backup1@test.nl",
           "membership": {

@@ -1,5 +1,6 @@
 from datetime import date
 
+from datauri import DataURI
 from pydantic import BaseModel
 
 from traka_automation.enrollments.models import Camp
@@ -20,16 +21,16 @@ class Participant(BaseModel):
     email_address: str
     phone: str
     dietary_restrictions: str
-    photo: str
+    photo: DataURI | None
     backup_name: str
     backup_email_address: str
     backup_phone: str
 
     # Scouting membership
-    member_number: str
-    scouting_group: str
-    scouting_city: str
-    age_group: str
+    member_number: str | None
+    scouting_group: str | None
+    scouting_city: str | None
+    age_group: str | None
 
     @classmethod
     def from_json(cls, json_data, camp):
@@ -42,7 +43,10 @@ class Participant(BaseModel):
         email_address = json_data["emailAddress"]
         phone = json_data["telephoneMobile"]
         dietary_restrictions = json_data["dietaryRestrictions"]
-        photo = json_data["photo"]
+        if "photo" in json_data:
+            photo = DataURI(json_data["photo"])
+        else:
+            photo = None
 
         backup_name = json_data["backupName"]
         backup_email_address = json_data["backupEmailAddress"]

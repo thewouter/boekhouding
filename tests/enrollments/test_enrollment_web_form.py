@@ -1,5 +1,3 @@
-from mollie.api.objects.payment_link import PaymentLink
-
 from traka_automation.enrollments.models.enrollment_web_form import (
     EnrollmentWebForm,
 )
