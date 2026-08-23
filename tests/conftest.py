@@ -18,5 +18,6 @@ def pytest_sessionstart(session):
                 "api_key": "xxxxx",
             },
             "dev": True,
+            "enrollment_draft_address": "mail@mail.com",
         }
     )
