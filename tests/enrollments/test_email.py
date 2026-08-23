@@ -1,7 +1,7 @@
 import html5lib
 
 from traka_automation.enrollments.email_handler import generate_enrollment_email
-from traka_automation.enrollments.models.enrollment_web_form import (
+from traka_automation.enrollments.models import (
     EnrollmentWebForm,
 )
 
