@@ -3,8 +3,7 @@ import os
 from mollie.api.objects.payment_link import PaymentLink
 from pydantic import BaseModel, ConfigDict
 
-from traka_automation.enrollments.models import Camp
-from traka_automation.enrollments.models import Participant
+from traka_automation.enrollments.models import Camp, Participant
 from traka_automation.enrollments.mollie_connection.generate_mollie_payment_link import (
     generate_payment_link,
 )
