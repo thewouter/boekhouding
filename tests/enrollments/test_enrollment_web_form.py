@@ -1,4 +1,4 @@
-from traka_automation.enrollments.enrollment.enrollment_web_form import (
+from traka_automation.enrollments.models.enrollment_web_form import (
     EnrollmentWebForm,
 )
 

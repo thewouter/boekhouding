@@ -7,7 +7,7 @@ from traka_automation.enrollments.email_handler import (
 from traka_automation.enrollments.enrollment.enrollment_form import (
     generate_enrollment_form_and_save,
 )
-from traka_automation.enrollments.enrollment.enrollment_web_form import (
+from traka_automation.enrollments.models.enrollment_web_form import (
     EnrollmentWebForm,
 )
 from traka_automation.util.config import secrets_config
