@@ -23,7 +23,7 @@ def send_email_enrollment_confirmation(enrollment_web_form: EnrollmentWebForm) -
     if secrets_config["dev"]:
         return
     draft_email(
-        mailbox=secrets_config["enrollment_draft_address"],  # info@ at a later time
+        mailbox=secrets_config["email"]["mailbox"],
         to_addresses=enrollment_web_form.email_addresses,
         subject=f"Bevestiging inschrijving voor {enrollment_web_form.camp.name} {enrollment_web_form.camp.year}",
         body=html,
