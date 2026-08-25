@@ -6,6 +6,8 @@ from pydantic import BaseModel
 from traka_automation.enrollments.models import Camp
 
 
+no_photo = DataURI.from_file("traka_automation/enrollments/templates/no_photo.png")
+
 class Participant(BaseModel):
     """A participant of a camp."""
 
@@ -21,7 +23,7 @@ class Participant(BaseModel):
     email_address: str
     phone: str
     dietary_restrictions: str
-    photo: DataURI | None
+    photo: DataURI
     backup_name: str
     backup_email_address: str
     backup_phone: str
@@ -43,14 +45,11 @@ class Participant(BaseModel):
         email_address = json_data["emailAddress"]
         phone = json_data["telephoneMobile"]
         dietary_restrictions = json_data["dietaryRestrictions"]
-        if "photo" in json_data:
-            photo = DataURI(json_data["photo"])
-        else:
-            photo = None
 
         backup_name = json_data["backupName"]
         backup_email_address = json_data["backupEmailAddress"]
         backup_phone = json_data["backupPhone"]
+        photo = json_data.get("photo", no_photo)
 
         member_number = json_data["membership"]["memberId"]
         scouting_group = json_data["membership"]["group"]["name"]

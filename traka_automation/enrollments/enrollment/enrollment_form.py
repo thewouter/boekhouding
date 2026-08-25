@@ -6,6 +6,15 @@ from docxtpl import DocxTemplate
 from traka_automation.enrollments.models import Participant
 from traka_automation.util.dutch_date import dutch_date
 
+def _get_photo_data(doc: DocxTemplate, participant: Participant) -> InlineImage | None:
+    if participant.photo is not None:
+        return InlineImage(
+            doc,
+            BytesIO(participant.photo.data),
+            width=Mm(35)
+        )
+    return None
+
 
 def generate_docx_enrollment_form(participant: Participant) -> DocxTemplate:
     """Generate an enrollment form."""
@@ -13,6 +22,7 @@ def generate_docx_enrollment_form(participant: Participant) -> DocxTemplate:
         f"{Path(__file__).resolve().parent.parent}/templates/aanmeldformulier.docx"
     )
 
+    photo_image = _get_photo_data(doc, participant)
     context = {
         "camp": {
             "name": participant.camp.name,
@@ -36,6 +46,7 @@ def generate_docx_enrollment_form(participant: Participant) -> DocxTemplate:
             "scouting_city": participant.scouting_city,
             "age_group": participant.age_group,
             "dietary_restrictions": participant.dietary_restrictions,
+            "photo": photo_image,
         },
         "cancellation_term": {
             "one": {
