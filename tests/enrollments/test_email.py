@@ -8,7 +8,9 @@ from traka_automation.enrollments.models import (
 
 def test_enrollment_email(example_enrollment_web_form: EnrollmentWebForm):
     """Test whether the enrollment email generation generates valid HTML5."""
-    html = generate_enrollment_email(example_enrollment_web_form)
+    html = generate_enrollment_email(
+        example_enrollment_web_form,
+    )
     html5parser = html5lib.HTMLParser(strict=True)
     html5parser.parse(html)
 
