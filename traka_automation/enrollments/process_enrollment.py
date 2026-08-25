@@ -17,8 +17,12 @@ from traka_automation.util.load_json import load_json
 OUTPUT_FOLDER = "/onedrive/data/exchange_folder/inschrijfformulieren"
 
 
-def send_email_enrollment_confirmation(enrollment_web_form: EnrollmentWebForm) -> None:
+def send_email_enrollment_confirmation(
+    enrollment_web_form: EnrollmentWebForm, forms: list[Path] | None = None
+) -> None:
     """Send a confirmation email_handler to the (fist) enrollment participant."""
+    if forms is None:
+        forms = []
     html = generate_enrollment_email(enrollment_web_form)
     if secrets_config["dev"]:
         return
@@ -27,6 +31,7 @@ def send_email_enrollment_confirmation(enrollment_web_form: EnrollmentWebForm) -
         to_addresses=enrollment_web_form.email_addresses,
         subject=f"Bevestiging inschrijving voor {enrollment_web_form.camp.name} {enrollment_web_form.camp.year}",
         body=html,
+        attachments=forms,
     )
 
 
@@ -59,7 +64,7 @@ def process_enrollment(enrollment: EnrollmentWebForm) -> None:
     print(f"processing enrollment {enrollment}")
     enrollment.write_to_file(folder=OUTPUT_FOLDER)
     pdf_files = generate_and_save_enrollment_forms(enrollment, folder=OUTPUT_FOLDER)
-    send_email_enrollment_confirmation(enrollment)
+    send_email_enrollment_confirmation(enrollment, pdf_files)
     os.remove(f"/onedrive/data/exchange_folder/inschrijvingen/{enrollment.uuid}.json")
 
 

@@ -1,3 +1,6 @@
+import base64
+from pathlib import Path
+
 import msal
 import requests
 
@@ -8,7 +11,13 @@ CLIENT_ID = secrets_config["ms_graph"]["client_id"]
 CLIENT_SECRET = secrets_config["ms_graph"]["client_secret"]
 
 
-def draft_email(mailbox: str, to_addresses: list[str], subject: str, body: str) -> None:
+def draft_email(
+    mailbox: str,
+    to_addresses: list[str],
+    subject: str,
+    body: str,
+    attachments: list[Path],
+) -> None:
     """Draft an email_handler to the mailbox."""
     app = msal.ConfidentialClientApplication(
         CLIENT_ID,
@@ -27,6 +36,16 @@ def draft_email(mailbox: str, to_addresses: list[str], subject: str, body: str) 
         "body": {"contentType": "HTML", "content": body},
         "toRecipients": [
             {"emailAddress": {"address": address}} for address in to_addresses
+        ],
+        "attachments": [
+            {
+                "@odata.type": "#microsoft.graph.fileAttachment",
+                "name": attachment.name,
+                "contentBytes": base64.b64encode(attachment.read_bytes()).decode(
+                    "utf-8"
+                ),
+            }
+            for attachment in attachments
         ],
     }
 
