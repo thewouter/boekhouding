@@ -1,4 +1,4 @@
-from traka_automation.enrollments.enrollment.camp import Camp
+from traka_automation.enrollments.models import Camp
 
 
 def test_camp_properties(example_camp: Camp):

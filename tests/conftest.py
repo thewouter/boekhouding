@@ -18,5 +18,10 @@ def pytest_sessionstart(session):
                 "api_key": "xxxxx",
             },
             "dev": True,
+            "email": {
+                "mailbox": "inschrijvingen@trapperskamp.com",
+                "signature_name": "Wouter van Harten",
+                "signature_title": "Penningmeester Plusscoutkring Trapperskamp",
+            },
         }
     )

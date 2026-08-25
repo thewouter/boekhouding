@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 
 from traka_automation.enrollments.email_handler import (
     draft_email,
@@ -7,7 +8,7 @@ from traka_automation.enrollments.email_handler import (
 from traka_automation.enrollments.enrollment.enrollment_form import (
     generate_enrollment_form_and_save,
 )
-from traka_automation.enrollments.enrollment.enrollment_web_form import (
+from traka_automation.enrollments.models import (
     EnrollmentWebForm,
 )
 from traka_automation.util.config import secrets_config
@@ -16,26 +17,34 @@ from traka_automation.util.load_json import load_json
 OUTPUT_FOLDER = "/onedrive/data/exchange_folder/inschrijfformulieren"
 
 
-def send_email_enrollment_confirmation(enrollment_web_form: EnrollmentWebForm) -> None:
+def send_email_enrollment_confirmation(
+    enrollment_web_form: EnrollmentWebForm, forms: list[Path] | None = None
+) -> None:
     """Send a confirmation email_handler to the (fist) enrollment participant."""
+    if forms is None:
+        forms = []
     html = generate_enrollment_email(enrollment_web_form)
     if secrets_config["dev"]:
         return
     draft_email(
-        mailbox="inschrijvingen@trapperskamp.com",  # info@ at a later time
+        mailbox=secrets_config["email"]["mailbox"],
         to_addresses=enrollment_web_form.email_addresses,
         subject=f"Bevestiging inschrijving voor {enrollment_web_form.camp.name} {enrollment_web_form.camp.year}",
         body=html,
+        attachments=forms,
     )
 
 
 def generate_and_save_enrollment_forms(
     enrollment_web_form: EnrollmentWebForm, folder: str
-) -> None:
+) -> list[Path]:
     """Generate an enrollment form and save it to the given folder for all participants."""
+    paths: list[Path] = []
     for participant in enrollment_web_form.participants:
-        filename = f"{folder}/{participant.name.replace(' ', '_')}.docx"
-        generate_enrollment_form_and_save(filename, participant)
+        filename = f"{folder}/{participant.name.replace(' ', '_')}_{participant.camp.name.replace(' ', '_')}.docx"
+        path = generate_enrollment_form_and_save(filename, participant)
+        paths.append(path)
+    return paths
 
 
 def load_new_enrollments() -> list[EnrollmentWebForm]:
@@ -54,8 +63,8 @@ def process_enrollment(enrollment: EnrollmentWebForm) -> None:
     """Process the enrollment and save the generated files to the given folder for all participants."""
     print(f"processing enrollment {enrollment}")
     enrollment.write_to_file(folder=OUTPUT_FOLDER)
-    send_email_enrollment_confirmation(enrollment)
-    generate_and_save_enrollment_forms(enrollment, folder=OUTPUT_FOLDER)
+    pdf_files = generate_and_save_enrollment_forms(enrollment, folder=OUTPUT_FOLDER)
+    send_email_enrollment_confirmation(enrollment, pdf_files)
     os.remove(f"/onedrive/data/exchange_folder/inschrijvingen/{enrollment.uuid}.json")
 
 

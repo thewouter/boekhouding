@@ -3,8 +3,8 @@ import os
 from mollie.api.objects.payment_link import PaymentLink
 from pydantic import BaseModel, ConfigDict
 
-from traka_automation.enrollments.enrollment.camp import Camp
-from traka_automation.enrollments.enrollment.participant import Participant
+from traka_automation.enrollments.models.camp import Camp
+from traka_automation.enrollments.models.participant import Participant
 from traka_automation.enrollments.mollie_connection.generate_mollie_payment_link import (
     generate_payment_link,
 )
@@ -18,15 +18,13 @@ class EnrollmentWebForm(BaseModel):
     uuid: str
     payment_link_cache: PaymentLink | None = None
 
-    model_config = ConfigDict(
-        arbitrary_types_allowed=True
-    )  #  To prevent generating many payment links
+    model_config = ConfigDict(arbitrary_types_allowed=True)
 
     @classmethod
     def from_json(cls, json_data: dict, uuid) -> EnrollmentWebForm:
         """Generate a new enrollment from JSON data and an uuid for traceability."""
         camp_name = json_data["activity"]["name"]
-        camp_price = json_data["activity"]["price"]
+        camp_price = json_data["activity"].get("price")
         camp_start_date = json_data["activity"]["startDate"]
         camp_end_date = json_data["activity"]["endDate"]
         camp = Camp(
@@ -47,7 +45,9 @@ class EnrollmentWebForm(BaseModel):
     @property
     def total_price(self):
         """The total price of the enrollment."""
-        return sum([p.camp.price for p in self.participants])
+        return sum(
+            [p.camp.price for p in self.participants if p.camp.price is not None]
+        )
 
     @property
     def combined_names(self):
@@ -60,8 +60,10 @@ class EnrollmentWebForm(BaseModel):
         return combined_names
 
     @property
-    def payment_link(self) -> PaymentLink:
+    def payment_link(self) -> PaymentLink | None:
         """Get the payment link for the Enrollment."""
+        if self.camp.price is None:
+            return None
         if self.payment_link_cache is None:
             self.payment_link_cache = generate_payment_link(
                 self.combined_names,
@@ -87,3 +89,7 @@ class EnrollmentWebForm(BaseModel):
         filename = os.path.join(folder, f"{self.uuid}.json")
         with open(filename, "w") as f:
             f.write(self.json_representation)
+
+    @property
+    def has_payment_info(self):
+        return self.camp.price is not None

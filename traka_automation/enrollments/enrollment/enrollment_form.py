@@ -1,10 +1,30 @@
 import subprocess
+from io import BytesIO
 from pathlib import Path
 
-from docxtpl import DocxTemplate
+from docx.shared import Mm
+from docxtpl import DocxTemplate, InlineImage
 
-from traka_automation.enrollments.enrollment.participant import Participant
+from traka_automation.enrollments.models import Participant
 from traka_automation.util.dutch_date import dutch_date
+
+
+def _get_payment_texts(participant: Participant) -> tuple[str, str, str, str]:
+    if participant.camp.price is not None:
+        price = f" € {participant.camp.price:0.2f}"
+        price_text = "van"
+        retainer_one_price = participant.camp.cancellation_term_one.text_retainer
+        retainer_two_price = participant.camp.cancellation_term_two.text_retainer
+    else:
+        price = ""
+        price_text = "dat later gecommuniceerd gaat worden"
+        retainer_one_price = "een kwart van het deelnemersgeld"
+        retainer_two_price = "de helft van het deelnemersgeld"
+    return price, price_text, retainer_one_price, retainer_two_price
+
+
+def _get_photo_data(doc: DocxTemplate, participant: Participant) -> InlineImage:
+    return InlineImage(doc, BytesIO(participant.photo.data), width=Mm(35))
 
 
 def generate_docx_enrollment_form(participant: Participant) -> DocxTemplate:
@@ -13,13 +33,19 @@ def generate_docx_enrollment_form(participant: Participant) -> DocxTemplate:
         f"{Path(__file__).resolve().parent.parent}/templates/aanmeldformulier.docx"
     )
 
+    photo_image = _get_photo_data(doc, participant)
+    price, price_text, retainer_one_price, retainer_two_price = _get_payment_texts(
+        participant
+    )
+
     context = {
         "camp": {
             "name": participant.camp.name,
             "year": participant.camp.start_date.year,
             "text_date_start": participant.camp.start_date_string,
             "text_date_end": participant.camp.end_date_string,
-            "price": f"{participant.camp.price:0.2f}",
+            "price": price,
+            "price_text": price_text,
         },
         "participant": {
             "name": participant.name,
@@ -36,15 +62,16 @@ def generate_docx_enrollment_form(participant: Participant) -> DocxTemplate:
             "scouting_city": participant.scouting_city,
             "age_group": participant.age_group,
             "dietary_restrictions": participant.dietary_restrictions,
+            "photo": photo_image,
         },
         "cancellation_term": {
             "one": {
                 "text": participant.camp.cancellation_term_one.text_date,
-                "retainer": participant.camp.cancellation_term_one.text_retainer,
+                "retainer": retainer_one_price,
             },
             "two": {
                 "text": participant.camp.cancellation_term_two.text_date,
-                "retainer": participant.camp.cancellation_term_two.text_retainer,
+                "retainer": retainer_two_price,
             },
         },
     }
@@ -78,8 +105,9 @@ def convert_docx_to_pdf(docx_path: str) -> None:
     )
 
 
-def generate_enrollment_form_and_save(filename, participant: Participant) -> None:
+def generate_enrollment_form_and_save(filename, participant: Participant) -> Path:
     """Generate an enrollment form and save it to the given filename as docx and PDF."""
     enrollment_form = generate_docx_enrollment_form(participant)
     save_enrollment_form(enrollment_form, filename)
     convert_docx_to_pdf(filename)
+    return Path(filename).with_suffix(".pdf")
