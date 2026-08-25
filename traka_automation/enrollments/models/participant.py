@@ -29,10 +29,10 @@ class Participant(BaseModel):
     backup_phone: str
 
     # Scouting membership
-    member_number: str | None
-    scouting_group: str | None
-    scouting_city: str | None
-    age_group: str | None
+    member_number: str
+    scouting_group: str
+    scouting_city: str
+    age_group: str
 
     @classmethod
     def from_json(cls, json_data, camp):
@@ -43,18 +43,18 @@ class Participant(BaseModel):
         address = json_data["address"]
         birth_date = date.fromisoformat(json_data["birthDate"])
         email_address = json_data["emailAddress"]
-        phone = json_data["telephoneMobile"]
+        phone = json_data["telephone"]
         dietary_restrictions = json_data["dietaryRestrictions"]
 
-        backup_name = json_data["backupName"]
-        backup_email_address = json_data["backupEmailAddress"]
-        backup_phone = json_data["backupPhone"]
         photo = json_data.get("photo", no_photo)
+        backup_name = json_data["iceName"]
+        backup_email_address = json_data.get("iceEmailAddress", "")
+        backup_phone = json_data["icePhone"]
 
-        member_number = json_data["membership"]["memberId"]
+        member_number = json_data["membership"].get("memberId", "")
         scouting_group = json_data["membership"]["group"]["name"]
         scouting_city = json_data["membership"]["group"]["city"]
-        age_group = json_data["membership"]["ageGroup"]
+        age_group = json_data["membership"].get("ageGroup", "")
 
         return cls(
             camp=camp,
