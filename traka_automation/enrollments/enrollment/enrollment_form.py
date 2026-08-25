@@ -107,8 +107,9 @@ def convert_docx_to_pdf(docx_path: str) -> None:
     )
 
 
-def generate_enrollment_form_and_save(filename, participant: Participant) -> None:
+def generate_enrollment_form_and_save(filename, participant: Participant) -> Path:
     """Generate an enrollment form and save it to the given filename as docx and PDF."""
     enrollment_form = generate_docx_enrollment_form(participant)
     save_enrollment_form(enrollment_form, filename)
     convert_docx_to_pdf(filename)
+    return Path(filename).with_suffix(".pdf")

@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 
 from traka_automation.enrollments.email_handler import (
     draft_email,
@@ -31,11 +32,14 @@ def send_email_enrollment_confirmation(enrollment_web_form: EnrollmentWebForm) -
 
 def generate_and_save_enrollment_forms(
     enrollment_web_form: EnrollmentWebForm, folder: str
-) -> None:
+) -> list[Path]:
     """Generate an enrollment form and save it to the given folder for all participants."""
+    paths: list[Path] = []
     for participant in enrollment_web_form.participants:
         filename = f"{folder}/{participant.name.replace(' ', '_')}_{participant.camp.name.replace(' ', '_')}.docx"
-        generate_enrollment_form_and_save(filename, participant)
+        path = generate_enrollment_form_and_save(filename, participant)
+        paths.append(path)
+    return paths
 
 
 def load_new_enrollments() -> list[EnrollmentWebForm]:
@@ -54,8 +58,8 @@ def process_enrollment(enrollment: EnrollmentWebForm) -> None:
     """Process the enrollment and save the generated files to the given folder for all participants."""
     print(f"processing enrollment {enrollment}")
     enrollment.write_to_file(folder=OUTPUT_FOLDER)
+    pdf_files = generate_and_save_enrollment_forms(enrollment, folder=OUTPUT_FOLDER)
     send_email_enrollment_confirmation(enrollment)
-    generate_and_save_enrollment_forms(enrollment, folder=OUTPUT_FOLDER)
     os.remove(f"/onedrive/data/exchange_folder/inschrijvingen/{enrollment.uuid}.json")
 
 
