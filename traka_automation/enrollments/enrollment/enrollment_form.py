@@ -25,11 +25,7 @@ def _get_payment_texts(participant: Participant) -> tuple[str, str, str, str]:
 
 def _get_photo_data(doc: DocxTemplate, participant: Participant) -> InlineImage | None:
     if participant.photo is not None:
-        return InlineImage(
-            doc,
-            BytesIO(participant.photo.data),
-            width=Mm(35)
-        )
+        return InlineImage(doc, BytesIO(participant.photo.data), width=Mm(35))
     return None
 
 
@@ -40,7 +36,9 @@ def generate_docx_enrollment_form(participant: Participant) -> DocxTemplate:
     )
 
     photo_image = _get_photo_data(doc, participant)
-    price, price_text, retainer_one_price, retainer_two_price = _get_payment_texts(participant)
+    price, price_text, retainer_one_price, retainer_two_price = _get_payment_texts(
+        participant
+    )
 
     context = {
         "camp": {

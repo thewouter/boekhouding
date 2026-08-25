@@ -5,8 +5,8 @@ from pydantic import BaseModel
 
 from traka_automation.enrollments.models import Camp
 
-
 no_photo = DataURI.from_file("traka_automation/enrollments/templates/no_photo.png")
+
 
 class Participant(BaseModel):
     """A participant of a camp."""
