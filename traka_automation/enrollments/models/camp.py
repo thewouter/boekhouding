@@ -26,7 +26,7 @@ class Camp(BaseModel):
     """A camp that can be enrolled in."""
 
     name: str
-    price: float
+    price: float | None
     start_date: datetime
     end_date: datetime
 

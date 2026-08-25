@@ -10,10 +10,12 @@ from traka_automation.declaration.conversion import (
 )
 
 
-def test_convert_office_document_to_pdf_calls_libreoffice(monkeypatch):
+def test_convert_office_document_to_pdf_calls_libreoffice(monkeypatch) -> None:
     calls: list[list[str]] = []
 
-    def fake_run(command: list[str], capture_output: bool, text: bool, check: bool):
+    def fake_run(
+        command: list[str], capture_output: bool, text: bool, check: bool
+    ) -> CompletedProcess[str]:
         calls.append(command)
         assert capture_output is True
         assert text is True

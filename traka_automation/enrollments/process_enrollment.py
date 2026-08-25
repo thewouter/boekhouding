@@ -34,7 +34,7 @@ def generate_and_save_enrollment_forms(
 ) -> None:
     """Generate an enrollment form and save it to the given folder for all participants."""
     for participant in enrollment_web_form.participants:
-        filename = f"{folder}/{participant.name.replace(' ', '_')}.docx"
+        filename = f"{folder}/{participant.name.replace(' ', '_')}_{participant.camp.name.replace(' ', '_')}.docx"
         generate_enrollment_form_and_save(filename, participant)
 
 

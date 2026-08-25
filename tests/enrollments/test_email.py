@@ -21,5 +21,5 @@ def test_enroll_email_content_keywords(example_enrollment_web_form: EnrollmentWe
     for participant in example_enrollment_web_form.participants:
         assert participant.name in html
     assert f"{example_enrollment_web_form.total_price:0.2f}" in html
-    assert example_enrollment_web_form.payment_link.payment_link in html
+    assert example_enrollment_web_form.payment_link.payment_link in html  # type: ignore
     assert example_enrollment_web_form.combined_names in html
