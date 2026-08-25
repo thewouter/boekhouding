@@ -24,7 +24,7 @@ class EnrollmentWebForm(BaseModel):
     def from_json(cls, json_data: dict, uuid) -> EnrollmentWebForm:
         """Generate a new enrollment from JSON data and an uuid for traceability."""
         camp_name = json_data["activity"]["name"]
-        camp_price = json_data["activity"]["price"]
+        camp_price = json_data["activity"].get("price")
         camp_start_date = json_data["activity"]["startDate"]
         camp_end_date = json_data["activity"]["endDate"]
         camp = Camp(
