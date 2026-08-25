@@ -12,6 +12,13 @@ def test_enrollment_from_json(example_enrollment_json):
     assert len(enrollment.participants) == 2
 
 
+def test_enrollment_form_no_price(
+    example_enrollment_web_form_no_price: EnrollmentWebForm,
+):
+    assert isinstance(example_enrollment_web_form_no_price, EnrollmentWebForm)
+    assert example_enrollment_web_form_no_price.total_price == 0.0
+
+
 def test_enrollment_web_form_properties(example_enrollment_web_form: EnrollmentWebForm):
     assert example_enrollment_web_form.total_price == 175.5 + 175.5
     assert example_enrollment_web_form.combined_names == "Jan Jansen en Piet Jansen"

@@ -41,13 +41,15 @@ class Camp(BaseModel):
     @property
     def cancellation_term_one(self):
         return CancellationTerm(
-            date=self.start_date - CANCELLATION_INTERVAL_ONE, retainer=self.price * 0.25
+            date=self.start_date - CANCELLATION_INTERVAL_ONE,
+            retainer=self.price * 0.25 if self.price else 0,
         )
 
     @property
     def cancellation_term_two(self):
         return CancellationTerm(
-            date=self.start_date - CANCELLATION_INTERVAL_TWO, retainer=self.price * 0.5
+            date=self.start_date - CANCELLATION_INTERVAL_TWO,
+            retainer=self.price * 0.5 if self.price else 0,
         )
 
     @property

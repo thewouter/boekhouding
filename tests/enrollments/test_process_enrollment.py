@@ -12,7 +12,7 @@ from traka_automation.enrollments.process_enrollment import (
 def test_send_email_enrollment_confirmation(
     example_enrollment_web_form: EnrollmentWebForm,
 ):
-    send_email_enrollment_confirmation(example_enrollment_web_form)
+    send_email_enrollment_confirmation(example_enrollment_web_form, [])
 
 
 def test_generate_and_save_enrollment_forms(

@@ -12,21 +12,19 @@ from traka_automation.util.dutch_date import dutch_date
 def _get_payment_texts(participant: Participant) -> tuple[str, str, str, str]:
     if participant.camp.price is not None:
         price = f" € {participant.camp.price:0.2f}"
-        price_text = " van "
+        price_text = "van"
         retainer_one_price = participant.camp.cancellation_term_one.text_retainer
         retainer_two_price = participant.camp.cancellation_term_two.text_retainer
     else:
         price = ""
-        price_text = " dat later gecommuniceerd gaat worden "
+        price_text = "dat later gecommuniceerd gaat worden"
         retainer_one_price = "een kwart van het deelnemersgeld"
         retainer_two_price = "de helft van het deelnemersgeld"
     return price, price_text, retainer_one_price, retainer_two_price
 
 
-def _get_photo_data(doc: DocxTemplate, participant: Participant) -> InlineImage | None:
-    if participant.photo is not None:
-        return InlineImage(doc, BytesIO(participant.photo.data), width=Mm(35))
-    return None
+def _get_photo_data(doc: DocxTemplate, participant: Participant) -> InlineImage:
+    return InlineImage(doc, BytesIO(participant.photo.data), width=Mm(35))
 
 
 def generate_docx_enrollment_form(participant: Participant) -> DocxTemplate:
@@ -107,8 +105,9 @@ def convert_docx_to_pdf(docx_path: str) -> None:
     )
 
 
-def generate_enrollment_form_and_save(filename, participant: Participant) -> None:
+def generate_enrollment_form_and_save(filename, participant: Participant) -> Path:
     """Generate an enrollment form and save it to the given filename as docx and PDF."""
     enrollment_form = generate_docx_enrollment_form(participant)
     save_enrollment_form(enrollment_form, filename)
     convert_docx_to_pdf(filename)
+    return Path(filename).with_suffix(".pdf")
