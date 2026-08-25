@@ -84,6 +84,7 @@ def example_enrollment_json() -> dict:
      }
     }""")
 
+
 @pytest.fixture
 def example_enrollment_json_no_price() -> dict:
     return json.loads("""{
@@ -142,9 +143,14 @@ def example_enrollment_json_no_price() -> dict:
 def example_enrollment_web_form(example_enrollment_json: dict) -> EnrollmentWebForm:
     return EnrollmentWebForm.from_json(example_enrollment_json, uuid="test-uuid")
 
+
 @pytest.fixture
-def example_enrollment_web_form_no_price(example_enrollment_json_no_price: dict) -> EnrollmentWebForm:
-    return EnrollmentWebForm.from_json(example_enrollment_json_no_price, uuid="test-uuid")
+def example_enrollment_web_form_no_price(
+    example_enrollment_json_no_price: dict,
+) -> EnrollmentWebForm:
+    return EnrollmentWebForm.from_json(
+        example_enrollment_json_no_price, uuid="test-uuid"
+    )
 
 
 @pytest.fixture

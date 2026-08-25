@@ -12,7 +12,9 @@ def test_enrollment_from_json(example_enrollment_json):
     assert len(enrollment.participants) == 2
 
 
-def test_enrollment_form_no_price(example_enrollment_web_form_no_price: EnrollmentWebForm):
+def test_enrollment_form_no_price(
+    example_enrollment_web_form_no_price: EnrollmentWebForm,
+):
     assert isinstance(example_enrollment_web_form_no_price, EnrollmentWebForm)
     assert example_enrollment_web_form_no_price.total_price == 0.0
 
