@@ -8,7 +8,7 @@ from traka_automation.financial_overview.overview.save_camp_overview import (
     save_camp_overview,
 )
 from traka_automation.financial_overview.parser.copy_xml_file_to_location import (
-    copy_gnucash_xml_to_cache_location,
+    copy_gnucash_xml_to_cache_location, SAVE_LOCATION,
 )
 
 CAMPS = [
