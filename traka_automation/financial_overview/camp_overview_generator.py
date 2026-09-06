@@ -8,6 +8,7 @@ from traka_automation.financial_overview.overview.save_camp_overview import (
     save_camp_overview,
 )
 from traka_automation.financial_overview.parser.copy_xml_file_to_location import (
+    SAVE_LOCATION,
     copy_gnucash_xml_to_cache_location,
 )
 
@@ -34,6 +35,10 @@ def main():
 def process_camp(camp: str, accounts, transactions, year=None):
     """Process a single camp and save the overview to a file."""
     overview = generate_overview(camp, accounts, transactions, year=year)
+    from traka_automation.financial_overview.parser.copy_xml_file_to_location import (
+        SAVE_LOCATION,
+    )
+
     save_camp_overview(
         overview, f"{SAVE_LOCATION}/kampoverzichten/overzicht_{camp}.txt"
     )
