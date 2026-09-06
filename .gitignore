@@ -3,3 +3,5 @@
 boekhouding.egg-info
 
 **/__pycache__/*
+
+*.log
