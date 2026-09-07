@@ -28,6 +28,16 @@ else
     useradd -m -u "$TARGET_UID" -g "$TARGET_GID" "$oduser"
 fi
 
+echo "---------------- UPDATING PROJECT ---------------"
+
+CURRENT_BRANCH=$(/usr/sbin/gosu "${oduser}" git rev-parse --abbrev-ref HEAD)
+if [ "$CURRENT_BRANCH" = "production" ]; then
+    echo "On production branch, checking for updates"
+    /usr/sbin/gosu "${oduser}" git pull
+else
+    echo "Not on production branch, skipping git pull"
+fi
+
 echo "---------------- STARTING SYNC ---------------"
 #First, we get any new data in
 /usr/sbin/gosu "${oduser}" /usr/local/bin/onedrive --sync --verbose --single-directory 'exchange_folder' --confdir /onedrive/conf --syncdir /onedrive/data
@@ -70,8 +80,6 @@ CURRENT_BRANCH=$(/usr/sbin/gosu "${oduser}" git rev-parse --abbrev-ref HEAD)
 if [ "$CURRENT_BRANCH" = "production" ]; then
     echo "On production branch, updating last_check file"
     touch /onedrive/conf/last_check
-    echo "On production branch, checking for updates"
-    /usr/sbin/gosu "${oduser}" git pull
 else
-    echo "Not on production branch, skipping last_check update and git pull"
+    echo "Not on production branch, skipping last_check update"
 fi
