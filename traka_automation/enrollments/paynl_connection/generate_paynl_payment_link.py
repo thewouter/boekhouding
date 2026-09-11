@@ -1,7 +1,7 @@
 from datetime import datetime
-from requests.auth import HTTPBasicAuth
 
 import requests
+from requests.auth import HTTPBasicAuth
 
 from traka_automation.enrollments.paynl_connection.dummy_payment_link import (
     DummyPaymentLink,
@@ -30,18 +30,16 @@ def _paynl_payload(
     quantity: int,
 ) -> dict[str, object]:
     pay_config = secrets_config["paynl"]
-    reference = (
-        f"{camp_name[:20]}-{name[:20]}-{end_date:%Y%m%d}"
-    ).replace(" ", "-")
+    reference = (f"{camp_name[:20]}-{name[:20]}-{end_date:%Y%m%d}").replace(" ", "-")
     description = f"Deelname van {name} aan {camp_name}."
-    unit_amount = int(round(amount * 100 / quantity))
+    unit_amount = round(amount * 100 / quantity)
     return {
         "serviceId": pay_config["service_id"],
         "description": description,
         "reference": reference[:REFERENCE_MAX_LENGTH],
         "returnUrl": RETURN_URL,
         "amount": {
-            "value": int(round(amount * 100)),
+            "value": round(amount * 100),
             "currency": "EUR",
         },
         "paymentMethod": {

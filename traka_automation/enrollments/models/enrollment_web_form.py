@@ -1,4 +1,5 @@
 import os
+
 from pydantic import BaseModel, ConfigDict
 
 from traka_automation.enrollments.models.camp import Camp
