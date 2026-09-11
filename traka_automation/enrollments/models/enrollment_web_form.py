@@ -1,13 +1,13 @@
 import os
 
-from mollie.api.objects.payment_link import PaymentLink
 from pydantic import BaseModel, ConfigDict
 
 from traka_automation.enrollments.models.camp import Camp
 from traka_automation.enrollments.models.participant import Participant
-from traka_automation.enrollments.mollie_connection.generate_mollie_payment_link import (
+from traka_automation.enrollments.paynl_connection.generate_paynl_payment_link import (
     generate_payment_link,
 )
+from traka_automation.enrollments.paynl_connection.payment_link import PaymentLink
 
 
 class EnrollmentWebForm(BaseModel):
@@ -66,10 +66,11 @@ class EnrollmentWebForm(BaseModel):
             return None
         if self.payment_link_cache is None:
             self.payment_link_cache = generate_payment_link(
-                self.combined_names,
-                self.camp.name,
-                self.total_price,
-                self.camp.end_date,
+                name=self.combined_names,
+                camp_name=self.camp.name,
+                amount=self.total_price,
+                end_date=self.camp.end_date,
+                quantity=len(self.participants),
             )
             if self.payment_link_cache is None:
                 raise ValueError("Payment link not available")
@@ -92,4 +93,5 @@ class EnrollmentWebForm(BaseModel):
 
     @property
     def has_payment_info(self):
+        """Whether this enrollment requires a payment link."""
         return self.camp.price is not None

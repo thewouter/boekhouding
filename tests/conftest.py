@@ -14,8 +14,9 @@ def pytest_sessionstart(session):
                 "client_id": "your-client-id",
                 "client_secret": "your-client-secret",
             },
-            "mollie": {
-                "api_key": "xxxxx",
+            "paynl": {
+                "service_id": "SL-1234-1234",
+                "secret": "xxxxx",
             },
             "dev": True,
             "email": {
