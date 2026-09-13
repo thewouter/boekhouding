@@ -1,6 +1,10 @@
 from datetime import datetime
 
-from traka_automation.enrollments.models import DummyTrakaPaymentLink, TrakaPaymentLink
+from traka_automation.enrollments.models import (
+    DummyTrakaPaymentLink,
+    EnrollmentWebForm,
+    TrakaPaymentLink,
+)
 from traka_automation.enrollments.payment_connection.generate_mollie_payment_link import (
     generate_mollie_payment_link,
 )
@@ -35,3 +39,20 @@ def generate_payment_link(
     return TrakaPaymentLink(
         payment_link=payment_link.payment_link, order_id=payment_link.order_id
     )
+
+
+def get_payment_link(enrollment: EnrollmentWebForm) -> TrakaPaymentLink | None:
+    """Get the payment link for the Enrollment."""
+    if enrollment.camp.price is None:
+        return None
+    if enrollment.payment_link_cache is None:
+        enrollment.payment_link_cache = generate_payment_link(
+            name=enrollment.combined_names,
+            camp_name=enrollment.camp.name,
+            amount=enrollment.total_price,
+            end_date=enrollment.camp.end_date,
+            quantity=len(enrollment.participants),
+        )
+        if enrollment.payment_link_cache is None:
+            raise ValueError("Payment link not available")
+    return enrollment.payment_link_cache
