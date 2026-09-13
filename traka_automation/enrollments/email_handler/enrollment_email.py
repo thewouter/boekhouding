@@ -21,7 +21,7 @@ def generate_enrollment_email(enrollment_form: EnrollmentWebForm) -> str:
         html = template.render(
             participant_names=enrollment_form.combined_names,
             camp_name=enrollment_form.camp.name,
-            payment_url=get_payment_link(enrollment_form),  # type: ignore
+            payment_url=get_payment_link(enrollment_form).payment_link,  # type: ignore
             amount=enrollment_form.total_price,
             signature_name=secrets_config["email"]["signature_name"],
             signature_title=secrets_config["email"]["signature_title"],

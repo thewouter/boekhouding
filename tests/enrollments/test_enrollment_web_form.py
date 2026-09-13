@@ -36,6 +36,17 @@ def test_get_payment_link_cache(example_enrollment_web_form: EnrollmentWebForm):
     assert example_enrollment_web_form.payment_link_cache == payment_link
 
 
+def test_enrollment_web_form_properties_no_price(
+    example_enrollment_web_form_no_price: EnrollmentWebForm,
+):
+    assert example_enrollment_web_form_no_price.total_price == 0.0
+    assert example_enrollment_web_form_no_price.combined_names == "Jan Jansen"
+    assert example_enrollment_web_form_no_price.payment_link_cache is None
+    get_payment_link(example_enrollment_web_form_no_price)
+    assert example_enrollment_web_form_no_price.payment_link_cache is None
+    assert not example_enrollment_web_form_no_price.has_payment_info
+
+
 def test_enrollment_web_form_properties(example_enrollment_web_form: EnrollmentWebForm):
     assert example_enrollment_web_form.total_price == 175.5 + 175.5
     assert example_enrollment_web_form.combined_names == "Jan Jansen en Piet Jansen"

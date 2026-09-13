@@ -3,7 +3,7 @@ from datetime import date
 from datauri import DataURI
 from pydantic import BaseModel
 
-from traka_automation.enrollments.models import Camp
+from traka_automation.enrollments.models.camp import Camp
 
 no_photo = DataURI.from_file("traka_automation/enrollments/templates/no_photo.png")
 
