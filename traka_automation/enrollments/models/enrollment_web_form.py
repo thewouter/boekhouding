@@ -4,10 +4,7 @@ from pydantic import BaseModel, ConfigDict
 
 from traka_automation.enrollments.models.camp import Camp
 from traka_automation.enrollments.models.participant import Participant
-from traka_automation.enrollments.paynl_connection.generate_paynl_payment_link import (
-    generate_payment_link,
-)
-from traka_automation.enrollments.paynl_connection.payment_link import PaymentLink
+from traka_automation.enrollments.models.payment_link import TrakaPaymentLink
 
 
 class EnrollmentWebForm(BaseModel):
@@ -16,7 +13,7 @@ class EnrollmentWebForm(BaseModel):
     camp: Camp
     participants: list[Participant] = []
     uuid: str
-    payment_link_cache: PaymentLink | None = None
+    payment_link_cache: TrakaPaymentLink | None = None
 
     model_config = ConfigDict(arbitrary_types_allowed=True)
 
@@ -58,23 +55,6 @@ class EnrollmentWebForm(BaseModel):
         else:
             combined_names = f"{', '.join(names[:-1])} en {names[-1]}"
         return combined_names
-
-    @property
-    def payment_link(self) -> PaymentLink | None:
-        """Get the payment link for the Enrollment."""
-        if self.camp.price is None:
-            return None
-        if self.payment_link_cache is None:
-            self.payment_link_cache = generate_payment_link(
-                name=self.combined_names,
-                camp_name=self.camp.name,
-                amount=self.total_price,
-                end_date=self.camp.end_date,
-                quantity=len(self.participants),
-            )
-            if self.payment_link_cache is None:
-                raise ValueError("Payment link not available")
-        return self.payment_link_cache
 
     @property
     def json_representation(self) -> str:

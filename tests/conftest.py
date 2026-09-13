@@ -6,7 +6,6 @@ def pytest_sessionstart(session):
     Called after the Session object has been created and
     before performing collection and entering the run test loop.
     """
-    print("xxxx")
     secrets_config.set_config(
         {
             "ms_graph": {
@@ -18,6 +17,7 @@ def pytest_sessionstart(session):
                 "service_id": "SL-1234-1234",
                 "secret": "xxxxx",
             },
+            "payment_service_provider": "paynl",
             "dev": True,
             "email": {
                 "mailbox": "inschrijvingen@trapperskamp.com",

@@ -2,13 +2,15 @@ from pathlib import Path
 
 from jinja2 import Environment, FileSystemLoader
 
-from traka_automation.enrollments.models import (
-    EnrollmentWebForm,
-)
-from traka_automation.util.config import secrets_config
+from traka_automation.enrollments.models import EnrollmentWebForm
+from traka_automation.enrollments.payment_connection import get_payment_link
+from traka_automation.settings import AppSettings
 
 
-def generate_enrollment_email(enrollment_form: EnrollmentWebForm) -> str:
+def generate_enrollment_email(
+    enrollment_form: EnrollmentWebForm,
+    settings: AppSettings,
+) -> str:
     """Generate an enrollment email_handler in HTML."""
     env = Environment(
         loader=FileSystemLoader(Path(__file__).resolve().parent.parent / "templates"),
@@ -20,10 +22,10 @@ def generate_enrollment_email(enrollment_form: EnrollmentWebForm) -> str:
         html = template.render(
             participant_names=enrollment_form.combined_names,
             camp_name=enrollment_form.camp.name,
-            payment_url=enrollment_form.payment_link.payment_link,  # type: ignore
+            payment_url=get_payment_link(enrollment_form, settings).payment_link,  # type: ignore
             amount=enrollment_form.total_price,
-            signature_name=secrets_config["email"]["signature_name"],
-            signature_title=secrets_config["email"]["signature_title"],
+            signature_name=settings.email.signature_name,
+            signature_title=settings.email.signature_title,
             logo_url="https://next.trapperskamp.com/processed_images/trapperskamp-vught.a83be22bfa0f671b.webp",
             camp_start_date=enrollment_form.camp.start_date_string,
             camp_end_date=enrollment_form.camp.end_date_string,
@@ -33,8 +35,8 @@ def generate_enrollment_email(enrollment_form: EnrollmentWebForm) -> str:
         html = template.render(
             participant_names=enrollment_form.combined_names,
             camp_name=enrollment_form.camp.name,
-            signature_name=secrets_config["email"]["signature_name"],
-            signature_title=secrets_config["email"]["signature_title"],
+            signature_name=settings.email.signature_name,
+            signature_title=settings.email.signature_title,
             logo_url="https://next.trapperskamp.com/processed_images/trapperskamp-vught.a83be22bfa0f671b.webp",
             camp_start_date=enrollment_form.camp.start_date_string,
             camp_end_date=enrollment_form.camp.end_date_string,
