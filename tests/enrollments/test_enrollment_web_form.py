@@ -2,6 +2,7 @@ from traka_automation.enrollments.models import (
     EnrollmentWebForm,
     TrakaPaymentLink,
 )
+from traka_automation.enrollments.payment_connection import get_payment_link
 
 
 def test_enrollment_from_json(example_enrollment_json):
@@ -18,11 +19,29 @@ def test_enrollment_form_no_price(
     assert example_enrollment_web_form_no_price.total_price == 0.0
 
 
+def test_get_payment_link(example_enrollment_web_form: EnrollmentWebForm):
+    payment_link = get_payment_link(example_enrollment_web_form)
+    assert isinstance(payment_link, TrakaPaymentLink)
+    assert payment_link.payment_link == "https://google.com"
+
+
+def test_get_payment_link_cache(example_enrollment_web_form: EnrollmentWebForm):
+    # Ensure the payment link cache is initially None
+    assert example_enrollment_web_form.payment_link_cache is None
+
+    # Generate the payment link and check if it is cached
+    payment_link = get_payment_link(example_enrollment_web_form)
+    assert isinstance(payment_link, TrakaPaymentLink)
+    assert example_enrollment_web_form.payment_link_cache is not None
+    assert example_enrollment_web_form.payment_link_cache == payment_link
+
+
 def test_enrollment_web_form_properties(example_enrollment_web_form: EnrollmentWebForm):
     assert example_enrollment_web_form.total_price == 175.5 + 175.5
     assert example_enrollment_web_form.combined_names == "Jan Jansen en Piet Jansen"
-    assert isinstance(example_enrollment_web_form.payment_link, TrakaPaymentLink)
-    assert example_enrollment_web_form.payment_link.payment_link == "https://google.com"  # type: ignore
+    assert example_enrollment_web_form.payment_link_cache is None
+    get_payment_link(example_enrollment_web_form)
+    assert isinstance(example_enrollment_web_form.payment_link_cache, TrakaPaymentLink)
     assert example_enrollment_web_form.json_representation.startswith(
         '{"camp":{"name":"Jungle '
         'Adventure","price":175.5,"start_date":"2027-07-12T00:00:00","end_date":"2027-07-19T00:00:00"},"participants":[{"camp":{"name":"Jungle '
@@ -35,14 +54,6 @@ def test_enrollment_web_form_properties(example_enrollment_web_form: EnrollmentW
         "wouter@woutervanharten.nl",
         "wouter.van.harten@trapperskamp.com",
     ]
-
-
-def test_enrollment_web_form_dynamic_link_generation(
-    example_enrollment_web_form: EnrollmentWebForm,
-):
-    assert example_enrollment_web_form.payment_link_cache is None
-    assert example_enrollment_web_form.payment_link.payment_link == "https://google.com"  # type: ignore
-    assert example_enrollment_web_form.payment_link_cache is not None
 
 
 def test_enrollment_web_form_to_json(example_enrollment_web_form: EnrollmentWebForm):

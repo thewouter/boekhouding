@@ -4,6 +4,7 @@ from traka_automation.enrollments.email_handler import generate_enrollment_email
 from traka_automation.enrollments.models import (
     EnrollmentWebForm,
 )
+from traka_automation.enrollments.payment_connection import get_payment_link
 
 
 def test_enrollment_email(example_enrollment_web_form: EnrollmentWebForm):
@@ -23,5 +24,5 @@ def test_enroll_email_content_keywords(example_enrollment_web_form: EnrollmentWe
     for participant in example_enrollment_web_form.participants:
         assert participant.name in html
     assert f"{example_enrollment_web_form.total_price:0.2f}" in html
-    assert example_enrollment_web_form.payment_link.payment_link in html  # type: ignore
+    assert get_payment_link(example_enrollment_web_form).payment_link in html  # type: ignore
     assert example_enrollment_web_form.combined_names in html
