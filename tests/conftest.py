@@ -17,6 +17,7 @@ def pytest_sessionstart(session):
                 "service_id": "SL-1234-1234",
                 "secret": "xxxxx",
             },
+            "payment_service_provider": "paynl",
             "dev": True,
             "email": {
                 "mailbox": "inschrijvingen@trapperskamp.com",
