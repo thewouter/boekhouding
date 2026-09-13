@@ -42,7 +42,9 @@ class AppSettings(BaseModel):
 
 def get_settings() -> AppSettings:
     config = secrets_config
-    payment_service_provider = PaymentServiceProvider(config["payment_service_provider"])
+    payment_service_provider = PaymentServiceProvider(
+        config["payment_service_provider"]
+    )
     settings_data = {
         "dev": config["dev"],
         "payment_service_provider": payment_service_provider,
