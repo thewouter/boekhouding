@@ -14,5 +14,4 @@ def load_json(path):
     with open(path, encoding="utf-8") as f:
         text = f.read()
     text = text.translate(WHITESPACE_TRANSLATION)
-    print(repr(text))
     return json.loads(text)

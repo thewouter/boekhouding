@@ -45,7 +45,6 @@ def process_camp(camp: str, accounts, transactions, year=None):
 
 
 if __name__ == "__main__":
-    print(sys.argv)
     if len(sys.argv) == 2:
         SAVE_LOCATION = sys.argv[1]
         CACHE_LOCATION = sys.argv[1]
