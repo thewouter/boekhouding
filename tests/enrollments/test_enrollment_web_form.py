@@ -1,7 +1,7 @@
-from traka_automation.enrollments.models.enrollment_web_form import (
+from traka_automation.enrollments.models import (
     EnrollmentWebForm,
+    TrakaPaymentLink,
 )
-from traka_automation.enrollments.paynl_connection.payment_link import PaymentLink
 
 
 def test_enrollment_from_json(example_enrollment_json):
@@ -21,7 +21,7 @@ def test_enrollment_form_no_price(
 def test_enrollment_web_form_properties(example_enrollment_web_form: EnrollmentWebForm):
     assert example_enrollment_web_form.total_price == 175.5 + 175.5
     assert example_enrollment_web_form.combined_names == "Jan Jansen en Piet Jansen"
-    assert isinstance(example_enrollment_web_form.payment_link, PaymentLink)
+    assert isinstance(example_enrollment_web_form.payment_link, TrakaPaymentLink)
     assert example_enrollment_web_form.payment_link.payment_link == "https://google.com"  # type: ignore
     assert example_enrollment_web_form.json_representation.startswith(
         '{"camp":{"name":"Jungle '

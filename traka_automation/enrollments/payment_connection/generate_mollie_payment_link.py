@@ -3,7 +3,7 @@ from datetime import datetime
 from mollie.api.client import Client
 from mollie.api.objects.payment_link import PaymentLink
 
-from traka_automation.enrollments.models.payment_link import TrakaPaymentLink
+from traka_automation.enrollments.models import TrakaPaymentLink
 from traka_automation.util.config import secrets_config
 
 

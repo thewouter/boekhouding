@@ -3,7 +3,7 @@ from datetime import datetime
 import requests
 from requests.auth import HTTPBasicAuth
 
-from traka_automation.enrollments.models.payment_link import TrakaPaymentLink
+from traka_automation.enrollments.models import TrakaPaymentLink
 from traka_automation.util.config import secrets_config
 
 PAYNL_ORDER_URL = "https://connect.pay.nl/v1/orders"

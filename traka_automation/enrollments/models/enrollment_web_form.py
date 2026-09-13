@@ -5,7 +5,9 @@ from pydantic import BaseModel, ConfigDict
 from traka_automation.enrollments.models.camp import Camp
 from traka_automation.enrollments.models.participant import Participant
 from traka_automation.enrollments.models.payment_link import TrakaPaymentLink
-from traka_automation.enrollments.payment_connection import generate_payment_link
+from traka_automation.enrollments.payment_connection.generate_payment_link import (
+    generate_payment_link,
+)
 
 
 class EnrollmentWebForm(BaseModel):
