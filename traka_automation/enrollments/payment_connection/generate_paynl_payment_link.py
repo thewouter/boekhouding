@@ -3,10 +3,7 @@ from datetime import datetime
 import requests
 from requests.auth import HTTPBasicAuth
 
-from traka_automation.enrollments.paynl_connection.dummy_payment_link import (
-    DummyPaymentLink,
-)
-from traka_automation.enrollments.paynl_connection.payment_link import PaymentLink
+from traka_automation.enrollments.models import TrakaPaymentLink
 from traka_automation.util.config import secrets_config
 
 PAYNL_ORDER_URL = "https://connect.pay.nl/v1/orders"
@@ -62,17 +59,14 @@ def _paynl_payload(
     }
 
 
-def generate_payment_link(
+def generate_paynl_payment_link(
     name: str,
     camp_name: str,
     amount: float,
     end_date: datetime,
     quantity: int = 1,
-) -> PaymentLink:
+) -> TrakaPaymentLink:
     """Get the payment link for the Enrollment through the Pay.nl API."""
-    if secrets_config["dev"]:
-        return DummyPaymentLink()
-
     pay_config = secrets_config["paynl"]
     response = requests.post(
         PAYNL_ORDER_URL,
@@ -84,4 +78,4 @@ def generate_payment_link(
     response.raise_for_status()
     response_data = response.json()
     redirect_url = response_data["links"]["redirect"]
-    return PaymentLink(payment_link=redirect_url, order_id=response_data.get("id"))
+    return TrakaPaymentLink(payment_link=redirect_url, order_id=response_data.get("id"))

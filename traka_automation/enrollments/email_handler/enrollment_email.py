@@ -5,6 +5,7 @@ from jinja2 import Environment, FileSystemLoader
 from traka_automation.enrollments.models import (
     EnrollmentWebForm,
 )
+from traka_automation.enrollments.payment_connection import get_payment_link
 from traka_automation.util.config import secrets_config
 
 
@@ -20,7 +21,7 @@ def generate_enrollment_email(enrollment_form: EnrollmentWebForm) -> str:
         html = template.render(
             participant_names=enrollment_form.combined_names,
             camp_name=enrollment_form.camp.name,
-            payment_url=enrollment_form.payment_link.payment_link,  # type: ignore
+            payment_url=get_payment_link(enrollment_form),  # type: ignore
             amount=enrollment_form.total_price,
             signature_name=secrets_config["email"]["signature_name"],
             signature_title=secrets_config["email"]["signature_title"],
