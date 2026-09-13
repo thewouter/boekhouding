@@ -4,11 +4,7 @@ from pathlib import Path
 import msal
 import requests
 
-from traka_automation.util.config import secrets_config
-
-TENANT_ID = secrets_config["ms_graph"]["tenant_id"]
-CLIENT_ID = secrets_config["ms_graph"]["client_id"]
-CLIENT_SECRET = secrets_config["ms_graph"]["client_secret"]
+from traka_automation.settings import MsGraphSettings
 
 
 def draft_email(
@@ -17,12 +13,13 @@ def draft_email(
     subject: str,
     body: str,
     attachments: list[Path],
+    settings: MsGraphSettings,
 ) -> None:
     """Draft an email_handler to the mailbox."""
     app = msal.ConfidentialClientApplication(
-        CLIENT_ID,
-        authority=f"https://login.microsoftonline.com/{TENANT_ID}",
-        client_credential=CLIENT_SECRET,
+        settings.client_id,
+        authority=f"https://login.microsoftonline.com/{settings.tenant_id}",
+        client_credential=settings.client_secret,
     )
 
     token = app.acquire_token_for_client(

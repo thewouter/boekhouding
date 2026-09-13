@@ -3,6 +3,7 @@ from traka_automation.enrollments.models import (
     TrakaPaymentLink,
 )
 from traka_automation.enrollments.payment_connection import get_payment_link
+from traka_automation.settings import get_settings
 
 
 def test_enrollment_from_json(example_enrollment_json):
@@ -20,7 +21,7 @@ def test_enrollment_form_no_price(
 
 
 def test_get_payment_link(example_enrollment_web_form: EnrollmentWebForm):
-    payment_link = get_payment_link(example_enrollment_web_form)
+    payment_link = get_payment_link(example_enrollment_web_form, get_settings())
     assert isinstance(payment_link, TrakaPaymentLink)
     assert payment_link.payment_link == "https://google.com"
 
@@ -30,7 +31,7 @@ def test_get_payment_link_cache(example_enrollment_web_form: EnrollmentWebForm):
     assert example_enrollment_web_form.payment_link_cache is None
 
     # Generate the payment link and check if it is cached
-    payment_link = get_payment_link(example_enrollment_web_form)
+    payment_link = get_payment_link(example_enrollment_web_form, get_settings())
     assert isinstance(payment_link, TrakaPaymentLink)
     assert example_enrollment_web_form.payment_link_cache is not None
     assert example_enrollment_web_form.payment_link_cache == payment_link
@@ -42,7 +43,7 @@ def test_enrollment_web_form_properties_no_price(
     assert example_enrollment_web_form_no_price.total_price == 0.0
     assert example_enrollment_web_form_no_price.combined_names == "Jan Jansen"
     assert example_enrollment_web_form_no_price.payment_link_cache is None
-    get_payment_link(example_enrollment_web_form_no_price)
+    get_payment_link(example_enrollment_web_form_no_price, get_settings())
     assert example_enrollment_web_form_no_price.payment_link_cache is None
     assert not example_enrollment_web_form_no_price.has_payment_info
 
@@ -51,7 +52,7 @@ def test_enrollment_web_form_properties(example_enrollment_web_form: EnrollmentW
     assert example_enrollment_web_form.total_price == 175.5 + 175.5
     assert example_enrollment_web_form.combined_names == "Jan Jansen en Piet Jansen"
     assert example_enrollment_web_form.payment_link_cache is None
-    get_payment_link(example_enrollment_web_form)
+    get_payment_link(example_enrollment_web_form, get_settings())
     assert isinstance(example_enrollment_web_form.payment_link_cache, TrakaPaymentLink)
     assert example_enrollment_web_form.json_representation.startswith(
         '{"camp":{"name":"Jungle '
