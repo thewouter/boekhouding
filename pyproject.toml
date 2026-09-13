@@ -19,6 +19,7 @@ dependencies = [
     "pyyaml>=6.0.3",
     "types-pyyaml>=6.0.12.20260724",
     "uuid>=1.30",
+    "mollie-api-python>=4.0.0",
 ]
 
 [project.scripts]
