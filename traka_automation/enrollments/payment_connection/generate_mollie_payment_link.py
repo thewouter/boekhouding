@@ -3,23 +3,26 @@ from datetime import datetime
 from mollie.api.client import Client
 from mollie.api.objects.payment_link import PaymentLink
 
-from traka_automation.enrollments.models import TrakaPaymentLink
-from traka_automation.util.config import secrets_config
+from traka_automation.enrollments.models.payment_link import TrakaPaymentLink
+from traka_automation.settings import MollieSettings
 
 
-def get_mollie_client() -> Client:
+def get_mollie_client(settings: MollieSettings) -> Client:
     """Get a payment_connection client."""
-    mollie_key = secrets_config["mollie"]["api_key"]
     mollie_client = Client()
-    mollie_client.set_api_key(mollie_key)
+    mollie_client.set_api_key(settings.api_key)
     return mollie_client
 
 
 def generate_mollie_payment_link(
-    name: str, camp: str, amount: float, end_date: datetime
+    name: str,
+    camp: str,
+    amount: float,
+    end_date: datetime,
+    settings: MollieSettings,
 ) -> TrakaPaymentLink:
     """Get the payment link for the Enrollment through the Mollie API."""
-    mollie_client = get_mollie_client()
+    mollie_client = get_mollie_client(settings)
     payment_link: PaymentLink = mollie_client.payment_links.create(
         {
             "description": f"Deelname van {name} aan {camp}.",

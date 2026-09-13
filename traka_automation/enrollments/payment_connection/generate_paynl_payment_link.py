@@ -3,8 +3,8 @@ from datetime import datetime
 import requests
 from requests.auth import HTTPBasicAuth
 
-from traka_automation.enrollments.models import TrakaPaymentLink
-from traka_automation.util.config import secrets_config
+from traka_automation.enrollments.models.payment_link import TrakaPaymentLink
+from traka_automation.settings import PayNlSettings
 
 PAYNL_ORDER_URL = "https://connect.pay.nl/v1/orders"
 IDEAL_PAYMENT_METHOD_ID = 10
@@ -25,13 +25,13 @@ def _paynl_payload(
     amount: float,
     end_date: datetime,
     quantity: int,
+    settings: PayNlSettings,
 ) -> dict[str, object]:
-    pay_config = secrets_config["paynl"]
     reference = (f"{camp_name[:20]}-{name[:20]}-{end_date:%Y%m%d}").replace(" ", "-")
     description = f"Deelname van {name} aan {camp_name}."
     unit_amount = round(amount * 100 / quantity)
     return {
-        "serviceId": pay_config["service_id"],
+        "serviceId": settings.service_id,
         "description": description,
         "reference": reference[:REFERENCE_MAX_LENGTH],
         "returnUrl": RETURN_URL,
@@ -65,14 +65,16 @@ def generate_paynl_payment_link(
     amount: float,
     end_date: datetime,
     quantity: int = 1,
+    settings: PayNlSettings | None = None,
 ) -> TrakaPaymentLink:
     """Get the payment link for the Enrollment through the Pay.nl API."""
-    pay_config = secrets_config["paynl"]
+    if settings is None:
+        raise ValueError("Pay.nl settings are required")
     response = requests.post(
         PAYNL_ORDER_URL,
         headers=_paynl_headers(),
-        auth=HTTPBasicAuth(pay_config["service_id"], pay_config["secret"]),
-        json=_paynl_payload(name, camp_name, amount, end_date, quantity),
+        auth=HTTPBasicAuth(settings.service_id, settings.secret),
+        json=_paynl_payload(name, camp_name, amount, end_date, quantity, settings),
         timeout=30,
     )
     response.raise_for_status()
