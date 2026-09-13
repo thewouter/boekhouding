@@ -6,7 +6,6 @@ def pytest_sessionstart(session):
     Called after the Session object has been created and
     before performing collection and entering the run test loop.
     """
-    print("xxxx")
     secrets_config.set_config(
         {
             "ms_graph": {
