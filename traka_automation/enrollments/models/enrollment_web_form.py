@@ -4,10 +4,8 @@ from pydantic import BaseModel, ConfigDict
 
 from traka_automation.enrollments.models.camp import Camp
 from traka_automation.enrollments.models.participant import Participant
-from traka_automation.enrollments.paynl_connection.generate_paynl_payment_link import (
-    generate_payment_link,
-)
-from traka_automation.enrollments.paynl_connection.payment_link import PaymentLink
+from traka_automation.enrollments.models.payment_link import TrakaPaymentLink
+from traka_automation.enrollments.payment_connection import generate_payment_link
 
 
 class EnrollmentWebForm(BaseModel):
@@ -16,7 +14,7 @@ class EnrollmentWebForm(BaseModel):
     camp: Camp
     participants: list[Participant] = []
     uuid: str
-    payment_link_cache: PaymentLink | None = None
+    payment_link_cache: TrakaPaymentLink | None = None
 
     model_config = ConfigDict(arbitrary_types_allowed=True)
 
@@ -60,7 +58,7 @@ class EnrollmentWebForm(BaseModel):
         return combined_names
 
     @property
-    def payment_link(self) -> PaymentLink | None:
+    def payment_link(self) -> TrakaPaymentLink | None:
         """Get the payment link for the Enrollment."""
         if self.camp.price is None:
             return None
