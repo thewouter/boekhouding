@@ -38,7 +38,9 @@ def test_enroll_email_content_keywords(example_enrollment_web_form: EnrollmentWe
     assert example_enrollment_web_form.combined_names in html
 
 
-def test_enroll_email_content_keywords_no_price(example_enrollment_web_form_no_price: EnrollmentWebForm):
+def test_enroll_email_content_keywords_no_price(
+    example_enrollment_web_form_no_price: EnrollmentWebForm,
+):
     """Test whether the enrollment email generation contains the expected keywords."""
     html = generate_enrollment_email(example_enrollment_web_form_no_price)
     assert example_enrollment_web_form_no_price.camp.start_date_string in html
