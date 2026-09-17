@@ -39,9 +39,6 @@ def _paynl_payload(
             "value": round(amount * 100),
             "currency": "EUR",
         },
-        "paymentMethod": {
-            "id": IDEAL_PAYMENT_METHOD_ID,
-        },
         "order": {
             "products": [
                 {
@@ -55,7 +52,10 @@ def _paynl_payload(
                 }
             ]
         },
-        "expiresAt": end_date.strftime("%Y-%m-%dT%H:%M:%S+00:00"),
+        "integration": {
+            "pointOfInteraction": "PAYMENT_REQUEST"
+        },
+        "expire": end_date.strftime("%Y-%m-%dT%H:%M:%S+00:00"),
     }
 
 
