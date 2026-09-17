@@ -52,9 +52,7 @@ def _paynl_payload(
                 }
             ]
         },
-        "integration": {
-            "pointOfInteraction": "PAYMENT_REQUEST"
-        },
+        "integration": {"pointOfInteraction": "PAYMENT_REQUEST"},
         "expire": end_date.strftime("%Y-%m-%dT%H:%M:%S+00:00"),
     }
 
