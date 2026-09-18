@@ -44,7 +44,7 @@ class Participant(BaseModel):
         birth_date = date.fromisoformat(json_data["birthDate"])
         email_address = json_data["emailAddress"]
         phone = json_data["telephone"]
-        dietary_restrictions = json_data["dietaryRestrictions"]
+        dietary_restrictions = json_data.get("dietaryRestrictions", "")
 
         photo = json_data.get("photo", no_photo)
         backup_name = json_data["iceName"]
