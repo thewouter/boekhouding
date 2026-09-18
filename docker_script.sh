@@ -29,7 +29,7 @@ else
 fi
 
 echo "---------------- UPDATING PROJECT ---------------"
-
+cd /scratch
 CURRENT_BRANCH=$(/usr/sbin/gosu "${oduser}" git rev-parse --abbrev-ref HEAD)
 if [ "$CURRENT_BRANCH" = "production" ]; then
     echo "On production branch, checking for updates"
