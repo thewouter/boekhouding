@@ -7,7 +7,7 @@ from traka_automation.declaration.latex import (
     compile_latex,
     render_declaration,
 )
-from traka_automation.util.load_json import load_json
+from traka_automation.util.json import load_json
 
 DECLARATIONS_DIR = Path("/onedrive/data/exchange_folder/declaraties")
 OUTPUT_DIR = Path("/onedrive/data/exchange_folder/declaratieformulieren")

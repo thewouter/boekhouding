@@ -75,3 +75,20 @@ class Participant(BaseModel):
             scouting_city=scouting_city,
             age_group=age_group,
         )
+
+    @property
+    def json_for_excel_overview(self):
+        return {
+            "name": self.name,
+            "address": self.address,
+            "zip_code": self.zip_code,
+            "city": self.city,
+            "birth_date": self.birth_date.strftime("%d-%m-%Y"),
+            "email_address": self.email_address,
+            "phone": self.phone,
+            "backup_phone": self.backup_phone,
+            "scouting_group": self.scouting_group,
+            "scouting_city": self.scouting_city,
+            "member_number": self.member_number,
+            "age_group": self.age_group,
+        }

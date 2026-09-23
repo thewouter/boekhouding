@@ -1,5 +1,3 @@
-import os
-
 from pydantic import BaseModel, ConfigDict
 
 from traka_automation.enrollments.models.camp import Camp
@@ -64,12 +62,6 @@ class EnrollmentWebForm(BaseModel):
     @property
     def email_addresses(self) -> list[str]:
         return [p.email_address for p in self.participants]
-
-    def write_to_file(self, folder: str) -> None:
-        """Write the Enrollment object to a file for further processing."""
-        filename = os.path.join(folder, f"{self.uuid}.json")
-        with open(filename, "w") as f:
-            f.write(self.json_representation)
 
     @property
     def has_payment_info(self):
