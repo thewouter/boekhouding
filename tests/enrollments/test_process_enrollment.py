@@ -20,7 +20,21 @@ def test_generate_and_save_enrollment_forms(
 ):
     generate_and_save_enrollment_forms(example_enrollment_web_form, str(tmp_path))
     counter = 0
-    for file in tmp_path.iterdir():
-        assert file.is_file()
-        counter += 1
-    assert counter == len(example_enrollment_web_form.participants) * 2
+    json_counter = 0
+    docx_counter = 0
+    pdf_counter = 0
+    for subfolder in tmp_path.iterdir():
+        if subfolder.is_dir():
+            for file in subfolder.iterdir():
+                assert file.is_file()
+                counter += 1
+                if file.suffix == ".json":
+                    json_counter += 1
+                elif file.suffix == ".docx":
+                    docx_counter += 1
+                elif file.suffix == ".pdf":
+                    pdf_counter += 1
+    assert counter == len(example_enrollment_web_form.participants) * 3
+    assert json_counter == len(example_enrollment_web_form.participants)
+    assert docx_counter == len(example_enrollment_web_form.participants)
+    assert pdf_counter == len(example_enrollment_web_form.participants)
