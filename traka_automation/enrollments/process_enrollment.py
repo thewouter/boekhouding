@@ -12,7 +12,7 @@ from traka_automation.enrollments.models import (
     EnrollmentWebForm,
 )
 from traka_automation.settings import get_settings
-from traka_automation.util.load_json import load_json
+from traka_automation.util.json import load_json, write_json
 
 OUTPUT_FOLDER = "/onedrive/data/exchange_folder/inschrijfformulieren"
 
@@ -43,9 +43,17 @@ def generate_and_save_enrollment_forms(
     """Generate an enrollment form and save it to the given folder for all participants."""
     paths: list[Path] = []
     for participant in enrollment_web_form.participants:
-        filename = f"{folder}/{participant.name.replace(' ', '_')}_{participant.camp.name.replace(' ', '_')}.docx"
+        participant_name_camp_name = f"{participant.name.replace(' ', '_')}_{participant.camp.name.replace(' ', '_')}"
+        participant_folder = f"{folder}/{participant_name_camp_name}"
+        os.makedirs(participant_folder, exist_ok=True)
+        filename = f"{participant_folder}/{participant_name_camp_name}.docx"
         path = generate_enrollment_form_and_save(filename, participant)
         paths.append(path)
+
+        write_json(
+            data=participant.json_for_excel_overview,
+            path=f"{participant_folder}/data.json",
+        )
     return paths
 
 
@@ -64,10 +72,9 @@ def load_new_enrollments() -> list[EnrollmentWebForm]:
 def process_enrollment(enrollment: EnrollmentWebForm) -> None:
     """Process the enrollment and save the generated files to the given folder for all participants."""
     print(f"processing enrollment {enrollment}")
-    enrollment.write_to_file(folder=OUTPUT_FOLDER)
     pdf_files = generate_and_save_enrollment_forms(enrollment, folder=OUTPUT_FOLDER)
     send_email_enrollment_confirmation(enrollment, pdf_files)
-    os.remove(f"/onedrive/data/exchange_folder/inschrijvingen/{enrollment.uuid}.json")
+    # os.remove(f"/onedrive/data/exchange_folder/inschrijvingen/{enrollment.uuid}.json")
 
 
 def main():

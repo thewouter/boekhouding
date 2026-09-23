@@ -88,7 +88,6 @@ def save_enrollment_form(enrollment_form: DocxTemplate, filename: str) -> None:
 
 def convert_docx_to_pdf(docx_path: str) -> None:
     """Convert the given docx file to PDF."""
-    print(str(Path(docx_path).parent))
     subprocess.run(
         [
             "soffice",
