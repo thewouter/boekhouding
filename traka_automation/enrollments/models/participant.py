@@ -79,6 +79,7 @@ class Participant(BaseModel):
     @property
     def json_for_excel_overview(self):
         return {
+            "camp": self.camp.name,
             "name": self.name,
             "address": self.address,
             "zip_code": self.zip_code,
