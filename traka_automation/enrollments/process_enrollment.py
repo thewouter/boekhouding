@@ -26,11 +26,15 @@ def send_email_enrollment_confirmation(
     attachments = forms.copy()
     if enrollment_web_form.has_adult_participant:
         attachments.append(
-            Path(__file__).resolve().parent / "templates" / "Gezondheidsformulier_18+.pdf"
+            Path(__file__).resolve().parent
+            / "templates"
+            / "Gezondheidsformulier_18+.pdf"
         )
     if enrollment_web_form.has_minor_participant:
         attachments.append(
-            Path(__file__).resolve().parent / "templates" / "Gezondheidsformulier_18-.pdf"
+            Path(__file__).resolve().parent
+            / "templates"
+            / "Gezondheidsformulier_18-.pdf"
         )
     settings = get_settings()
     html = generate_enrollment_email(enrollment_web_form, settings)
