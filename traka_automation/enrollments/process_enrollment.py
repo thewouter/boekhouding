@@ -23,6 +23,15 @@ def send_email_enrollment_confirmation(
     """Send a confirmation email_handler to the (fist) enrollment participant."""
     if forms is None:
         forms = []
+    attachments = forms.copy()
+    if enrollment_web_form.has_adult_participant:
+        attachments.append(
+            Path(__file__).resolve().parent / "templates" / "Gezondheidsformulier_18+.pdf"
+        )
+    if enrollment_web_form.has_minor_participant:
+        attachments.append(
+            Path(__file__).resolve().parent / "templates" / "Gezondheidsformulier_18-.pdf"
+        )
     settings = get_settings()
     html = generate_enrollment_email(enrollment_web_form, settings)
     if settings.dev:
@@ -32,7 +41,7 @@ def send_email_enrollment_confirmation(
         to_addresses=enrollment_web_form.email_addresses,
         subject=f"Bevestiging inschrijving voor {enrollment_web_form.camp.name} {enrollment_web_form.camp.year}",
         body=html,
-        attachments=forms,
+        attachments=attachments,
         settings=settings.ms_graph,
     )
 
