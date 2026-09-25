@@ -1,5 +1,6 @@
 from pydantic import BaseModel, ConfigDict
 
+from datetime import date
 from traka_automation.enrollments.models.camp import Camp
 from traka_automation.enrollments.models.participant import Participant
 from traka_automation.enrollments.models.payment_link import TrakaPaymentLink
@@ -53,6 +54,22 @@ class EnrollmentWebForm(BaseModel):
         else:
             combined_names = f"{', '.join(names[:-1])} en {names[-1]}"
         return combined_names
+
+    @property
+    def has_minor_participant(self):
+        """Whether this enrollment has any minor participants."""
+        return any(
+            (p.birth_date > self.camp.start_date.replace(year=self.camp.start_date.year - 18).date())
+            for p in self.participants
+        )
+
+    @property
+    def has_adult_participant(self):
+        """Whether this enrollment has any adult participants."""
+        return any(
+            (p.birth_date <= self.camp.start_date.replace(year=self.camp.start_date.year - 18).date())
+            for p in self.participants
+        )
 
     @property
     def json_representation(self) -> str:
