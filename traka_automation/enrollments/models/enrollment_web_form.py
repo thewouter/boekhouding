@@ -55,6 +55,32 @@ class EnrollmentWebForm(BaseModel):
         return combined_names
 
     @property
+    def has_minor_participant(self):
+        """Whether this enrollment has any minor participants."""
+        return any(
+            (
+                p.birth_date
+                > self.camp.start_date.replace(
+                    year=self.camp.start_date.year - 18
+                ).date()
+            )
+            for p in self.participants
+        )
+
+    @property
+    def has_adult_participant(self):
+        """Whether this enrollment has any adult participants."""
+        return any(
+            (
+                p.birth_date
+                <= self.camp.start_date.replace(
+                    year=self.camp.start_date.year - 18
+                ).date()
+            )
+            for p in self.participants
+        )
+
+    @property
     def json_representation(self) -> str:
         """Flatten the Enrollment to JSON."""
         return self.model_dump_json()
