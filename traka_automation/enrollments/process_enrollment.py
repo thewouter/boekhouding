@@ -83,7 +83,7 @@ def process_enrollment(enrollment: EnrollmentWebForm) -> None:
     print(f"processing enrollment {enrollment}")
     pdf_files = generate_and_save_enrollment_forms(enrollment, folder=OUTPUT_FOLDER)
     send_email_enrollment_confirmation(enrollment, pdf_files)
-    # os.remove(f"/onedrive/data/exchange_folder/inschrijvingen/{enrollment.uuid}.json")
+    os.remove(f"/onedrive/data/exchange_folder/inschrijvingen/{enrollment.uuid}.json")
 
 
 def main():
