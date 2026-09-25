@@ -80,3 +80,20 @@ def test_enrollment_web_form_to_json(example_enrollment_web_form: EnrollmentWebF
         "mag geen rijst op "
         'woensdagen","photo":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAACXBIWXMAAAsSAAALEgHS3X78AAAARElEQVQIHWM8zRn3/wb7U4aoDzYMTAyMDIwHuMP/7+K5zPCb6Q/DP4b/DCx6P+QY7rO9Ykh4bw8WYPzP0PAfJANSDgIAgkYYUh06X6cAAAAASUVORK5CYII==","backup_name":"Papa '
     )
+
+
+def test_has_minor_and_adult_participants(
+    example_enrollment_web_form: EnrollmentWebForm,
+):
+    """Test the has_minor_participant and has_adult_participant properties of EnrollmentWebForm."""
+    assert example_enrollment_web_form.has_minor_participant is True
+    assert example_enrollment_web_form.has_adult_participant is True
+
+    adult = example_enrollment_web_form.participants[1]
+    del example_enrollment_web_form.participants[1]
+    assert example_enrollment_web_form.has_minor_participant is True
+    assert example_enrollment_web_form.has_adult_participant is False
+    example_enrollment_web_form.participants.append(adult)
+    del example_enrollment_web_form.participants[0]
+    assert example_enrollment_web_form.has_minor_participant is False
+    assert example_enrollment_web_form.has_adult_participant is True
