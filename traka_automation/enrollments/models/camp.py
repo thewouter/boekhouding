@@ -1,3 +1,4 @@
+import math
 from datetime import datetime, timedelta
 
 from pydantic import BaseModel
@@ -55,3 +56,20 @@ class Camp(BaseModel):
     @property
     def year(self):
         return self.start_date.year
+
+    @property
+    def allows_for_two_payment_terms(self):
+        return "mission" in self.name.lower() or "trex" in self.name.lower()
+
+    @property
+    def payment_term_one(self) -> float:
+        if self.price is None:
+            raise ValueError("Camp has no price")
+        term_one = math.ceil((self.price * 0.5) / 50) * 50
+        return min(term_one, self.price)
+
+    @property
+    def payment_term_two(self) -> float:
+        if self.price is None:
+            raise ValueError("Camp has no price")
+        return self.price - self.payment_term_one
