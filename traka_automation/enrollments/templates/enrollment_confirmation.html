@@ -16,7 +16,6 @@
 <p>
     Superleuk dat je voor deze activiteit gekozen hebt. Het wordt zeker een erg leuke en mooie ervaring!
 </p>
-
 <p>
     Je inschrijving is definitief zodra de betaling binnen is.
     Dit kun je eenvoudig voldoen via onderstaande betaallink:
@@ -26,6 +25,25 @@
     <a href="{{ payment_url }}">{{ payment_url }}</a>
 </p>
 
+{% if payment_in_two_terms %}
+<p>
+    Mocht je dit liever rechtstreeks overmaken, dan kan dat ook in twee termijnen:
+</p>
+
+<p>
+    Per direct:<br>
+    <strong>Bedrag:</strong> €{{ "%.2f"|format(term_one) }}<br>
+    <strong>IBAN:</strong> NL33 INGB 0000 2349 42 <br>
+    <strong>Ten name van:</strong> plusscoutskring Trapperskamp.
+</p>
+
+<p>
+    Vóór {{ term_two_due_date }}:<br>
+    <strong>Bedrag:</strong> €{{ "%.2f"|format(term_two) }}<br>
+    <strong>IBAN:</strong> NL33 INGB 0000 2349 42 <br>
+    <strong>Ten name van:</strong> plusscoutskring Trapperskamp.
+</p>
+{% else %}
 <p>
     Mocht je dit liever direct overmaken, dan kan dat ook.
 </p>
@@ -35,6 +53,7 @@
     <strong>IBAN:</strong> NL33 INGB 0000 2349 42 <br>
     <strong>Ten name van:</strong> plusscoutskring Trapperskamp.
 </p>
+{% endif %}
 
 <p>
     Mocht je naar aanleiding van je inschrijving nog vragen hebben; neem dan gerust contact met ons op door een mail te sturen naar: <a href="mailto:info@trapperskamp.com">info@trapperskamp.com</a>.
