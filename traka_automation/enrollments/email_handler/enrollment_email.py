@@ -29,6 +29,10 @@ def generate_enrollment_email(
             logo_url="https://next.trapperskamp.com/processed_images/trapperskamp-vught.a83be22bfa0f671b.webp",
             camp_start_date=enrollment_form.camp.start_date_string,
             camp_end_date=enrollment_form.camp.end_date_string,
+            payment_in_two_terms=enrollment_form.camp.allows_for_two_payment_terms,
+            term_one=enrollment_form.camp.payment_term_one,
+            term_two=enrollment_form.camp.payment_term_two,
+            term_two_due_date=enrollment_form.camp.cancellation_term_one.text_date,
         )
     else:
         template = env.get_template("enrollment_confirmation_no_payment.html")

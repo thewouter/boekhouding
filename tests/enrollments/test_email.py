@@ -58,3 +58,37 @@ def test_enroll_email_content_keywords_no_price(
     assert example_enrollment_web_form_no_price.combined_names in html
     assert "€" not in html
     assert "betaal" not in html
+
+
+def test_enrollment_email_single_term_does_not_mention_terms(
+    example_enrollment_web_form: EnrollmentWebForm,
+):
+    """Test that camps without two payment terms only show the single payment option."""
+    settings = get_settings()
+    html = generate_enrollment_email(example_enrollment_web_form, settings)
+    assert "twee termijnen" not in html
+    assert "Vóór" not in html
+
+
+def test_enrollment_email_two_terms_is_valid_html(
+    example_enrollment_web_form_two_terms: EnrollmentWebForm,
+):
+    """Test whether the enrollment email generation generates valid HTML5."""
+    settings = get_settings()
+    html = generate_enrollment_email(example_enrollment_web_form_two_terms, settings)
+    html5parser = html5lib.HTMLParser(strict=True)
+    html5parser.parse(html)
+
+
+def test_enrollment_email_two_terms_content(
+    example_enrollment_web_form_two_terms: EnrollmentWebForm,
+):
+    """Test that camps allowing two payment terms show both terms with their amounts and due date."""
+    settings = get_settings()
+    camp = example_enrollment_web_form_two_terms.camp
+    html = generate_enrollment_email(example_enrollment_web_form_two_terms, settings)
+    assert "twee termijnen" in html
+    assert f"{camp.payment_term_one:.2f}" in html
+    assert f"{camp.payment_term_two:.2f}" in html
+    assert camp.cancellation_term_one.text_date in html
+    assert "Mocht je dit liever direct overmaken, dan kan dat ook." not in html
