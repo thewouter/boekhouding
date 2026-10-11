@@ -16,6 +16,21 @@ from traka_automation.util.json import load_json, write_json
 
 OUTPUT_FOLDER = "/onedrive/data/exchange_folder/inschrijfformulieren"
 
+FILENAME_TRANSLATION_DICT = str.maketrans(
+    {
+        "<": "_",
+        ">": "_",
+        ":": "_",
+        '"': "_",
+        "/": "_",
+        "\\": "_",
+        "|": "_",
+        "?": "_",
+        "*": "_",
+        " ": "_",
+    }
+)
+
 
 def send_email_enrollment_confirmation(
     enrollment_web_form: EnrollmentWebForm, forms: list[Path] | None = None
@@ -56,7 +71,11 @@ def generate_and_save_enrollment_forms(
     """Generate an enrollment form and save it to the given folder for all participants."""
     paths: list[Path] = []
     for participant in enrollment_web_form.participants:
-        participant_name_camp_name = f"{participant.name.replace(' ', '_')}_{participant.camp.name.replace(' ', '_')}"
+        participant_name_camp_name = (
+            f"{participant.name}_{participant.camp.name}".translate(
+                FILENAME_TRANSLATION_DICT
+            )
+        )
         participant_folder = f"{folder}/{participant_name_camp_name}"
         os.makedirs(participant_folder, exist_ok=True)
         filename = f"{participant_folder}/{participant_name_camp_name}.docx"
