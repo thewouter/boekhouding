@@ -1,3 +1,4 @@
+import copy
 import json
 
 import pytest
@@ -156,3 +157,12 @@ def example_enrollment_web_form_no_price(
 @pytest.fixture
 def example_camp(example_enrollment_web_form: EnrollmentWebForm) -> Camp:
     return example_enrollment_web_form.camp
+
+
+@pytest.fixture
+def example_enrollment_web_form_two_terms(
+    example_enrollment_json: dict,
+) -> EnrollmentWebForm:
+    json_data = copy.deepcopy(example_enrollment_json)
+    json_data["activity"]["name"] = "Mission Impossible"
+    return EnrollmentWebForm.from_json(json_data, uuid="test-uuid")
