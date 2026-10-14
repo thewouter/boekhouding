@@ -22,8 +22,8 @@ def _paynl_headers() -> dict[str, str]:
 
 def _get_reference(name: str, camp_name: str, end_date: datetime) -> str:
     reference = (f"{camp_name[:20]}-{name[:20]}-{end_date:%Y%m%d}").replace(" ", "-")
-    pattern = re.compile('[\\W_]+')
-    reference = pattern.sub('', reference)
+    pattern = re.compile("[\\W_]+")
+    reference = pattern.sub("", reference)
     return reference[:REFERENCE_MAX_LENGTH]
 
 

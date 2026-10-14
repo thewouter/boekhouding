@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import UTC, datetime
 
 import html5lib
 
@@ -7,7 +7,9 @@ from traka_automation.enrollments.models import (
     EnrollmentWebForm,
 )
 from traka_automation.enrollments.payment_connection import get_payment_link
-from traka_automation.enrollments.payment_connection.generate_paynl_payment_link import _get_reference
+from traka_automation.enrollments.payment_connection.generate_paynl_payment_link import (
+    _get_reference,
+)
 from traka_automation.settings import get_settings
 
 
@@ -101,6 +103,6 @@ def test_get_reference_is_alphanumeric():
     """Test that the reference generation works correctly."""
     name = "John Doe,*-8ee"
     camp_name = "Summer Camp 2024"
-    end_date = datetime.strptime("2024-08-15", "%Y-%m-%d")
+    end_date = datetime.strptime("2024-08-15", "%Y-%m-%d").astimezone(UTC)
     reference = _get_reference(name, camp_name, end_date)
     assert reference.isalnum()
