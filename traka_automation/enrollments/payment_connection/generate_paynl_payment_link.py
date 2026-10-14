@@ -1,3 +1,4 @@
+import re
 from datetime import datetime
 
 import requests
@@ -19,6 +20,13 @@ def _paynl_headers() -> dict[str, str]:
     }
 
 
+def _get_reference(name: str, camp_name: str, end_date: datetime) -> str:
+    reference = (f"{camp_name[:20]}-{name[:20]}-{end_date:%Y%m%d}").replace(" ", "-")
+    pattern = re.compile('[\\W_]+')
+    reference = pattern.sub('', reference)
+    return reference[:REFERENCE_MAX_LENGTH]
+
+
 def _paynl_payload(
     name: str,
     camp_name: str,
@@ -27,13 +35,13 @@ def _paynl_payload(
     quantity: int,
     settings: PayNlSettings,
 ) -> dict[str, object]:
-    reference = (f"{camp_name[:20]}-{name[:20]}-{end_date:%Y%m%d}").replace(" ", "-")
+    reference = _get_reference(name, camp_name, end_date)
     description = f"Deelname van {name} aan {camp_name}."
     unit_amount = round(amount * 100 / quantity)
     return {
         "serviceId": settings.service_id,
         "description": description,
-        "reference": reference[:REFERENCE_MAX_LENGTH],
+        "reference": reference,
         "returnUrl": RETURN_URL,
         "amount": {
             "value": round(amount * 100),
