@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import html5lib
 
 from traka_automation.enrollments.email_handler import generate_enrollment_email
@@ -5,6 +7,7 @@ from traka_automation.enrollments.models import (
     EnrollmentWebForm,
 )
 from traka_automation.enrollments.payment_connection import get_payment_link
+from traka_automation.enrollments.payment_connection.generate_paynl_payment_link import _get_reference
 from traka_automation.settings import get_settings
 
 
@@ -92,3 +95,12 @@ def test_enrollment_email_two_terms_content(
     assert f"{camp.payment_term_two:.2f}" in html
     assert camp.cancellation_term_one.text_date in html
     assert "Mocht je dit liever direct overmaken, dan kan dat ook." not in html
+
+
+def test_get_reference_is_alphanumeric():
+    """Test that the reference generation works correctly."""
+    name = "John Doe,*-8ee"
+    camp_name = "Summer Camp 2024"
+    end_date = datetime.strptime("2024-08-15", "%Y-%m-%d")
+    reference = _get_reference(name, camp_name, end_date)
+    assert reference.isalnum()
