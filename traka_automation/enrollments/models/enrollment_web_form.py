@@ -68,6 +68,13 @@ class EnrollmentWebForm(BaseModel):
         )
 
     @property
+    def _adult_count(self) -> int:
+        cutoff = self.camp.start_date.replace(
+            year=self.camp.start_date.year - 18
+        ).date()
+        return sum(p.birth_date <= cutoff for p in self.participants)
+
+    @property
     def has_adult_participant(self):
         """Whether this enrollment has any adult participants."""
         return any(
@@ -93,3 +100,20 @@ class EnrollmentWebForm(BaseModel):
     def has_payment_info(self):
         """Whether this enrollment requires a payment link."""
         return self.camp.price is not None
+
+    def split(self) -> list[EnrollmentWebForm]:
+        """Split the enrollment into multiple enrollments.
+
+        One for each participant, unless there is only one participant or
+        exactly one adult with one or more minors."""
+        if len(self.participants) <= 1 or self._adult_count == 1:
+            return [self]
+
+        return [
+            EnrollmentWebForm(
+                camp=self.camp,
+                participants=[participant],
+                uuid=self.uuid,
+            )
+            for participant in self.participants
+        ]

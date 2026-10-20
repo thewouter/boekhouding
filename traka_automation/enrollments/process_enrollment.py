@@ -113,7 +113,8 @@ def main():
     """Main enrollment loop."""
     new_enrollments = load_new_enrollments()
     for enrollment in new_enrollments:
-        process_enrollment(enrollment)
+        for enrollment_part in enrollment.split():
+            process_enrollment(enrollment_part)
 
 
 if __name__ == "__main__":
