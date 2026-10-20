@@ -97,3 +97,45 @@ def test_has_minor_and_adult_participants(
     del example_enrollment_web_form.participants[0]
     assert example_enrollment_web_form.has_minor_participant is False
     assert example_enrollment_web_form.has_adult_participant is True
+
+
+def test_split_one_adult_and_minor_returns_self(
+    example_enrollment_web_form: EnrollmentWebForm,
+):
+    """One adult with a minor is not split."""
+    assert example_enrollment_web_form.has_minor_participant
+    result = example_enrollment_web_form.split()
+    assert len(result) == 1
+    assert result[0] is example_enrollment_web_form
+
+
+def test_split_multiple_adults(example_enrollment_web_form: EnrollmentWebForm):
+    """Two adults with two minors is split into four forms."""
+    participants = example_enrollment_web_form.participants
+    participants.append(participants[1].model_copy())
+    participants.append(participants[0].model_copy())
+
+    result = example_enrollment_web_form.split()
+
+    assert len(result) == 4
+    for form, participant in zip(result, participants):
+        assert form.participants == [participant]
+        assert form.camp == example_enrollment_web_form.camp
+        assert form.uuid == example_enrollment_web_form.uuid
+
+
+def test_split_single_participant_returns_self(
+    example_enrollment_web_form: EnrollmentWebForm,
+):
+    """One participant is not split."""
+    del example_enrollment_web_form.participants[1]
+    assert example_enrollment_web_form.split() == [example_enrollment_web_form]
+    assert example_enrollment_web_form.split()[0] is example_enrollment_web_form
+
+
+def test_split_only_minors(example_enrollment_web_form: EnrollmentWebForm):
+    """Two minors are split into two forms."""
+    minor = example_enrollment_web_form.participants[0]
+    example_enrollment_web_form.participants[:] = [minor, minor.model_copy()]
+    assert not example_enrollment_web_form.has_adult_participant
+    assert len(example_enrollment_web_form.split()) == 2
