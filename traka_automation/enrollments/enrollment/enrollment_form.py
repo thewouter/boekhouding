@@ -63,6 +63,7 @@ def generate_docx_enrollment_form(participant: Participant) -> DocxTemplate:
             "age_group": participant.age_group,
             "dietary_restrictions": participant.dietary_restrictions,
             "photo": photo_image,
+            "postcode": participant.zip_code,
         },
         "cancellation_term": {
             "one": {
