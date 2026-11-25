@@ -3,6 +3,7 @@ from datetime import datetime
 
 import requests
 from requests.auth import HTTPBasicAuth
+from unidecode import unidecode
 
 from traka_automation.enrollments.models.payment_link import TrakaPaymentLink
 from traka_automation.settings import PayNlSettings
@@ -35,8 +36,9 @@ def _paynl_payload(
     quantity: int,
     settings: PayNlSettings,
 ) -> dict[str, object]:
-    reference = _get_reference(name, camp_name, end_date)
-    description = f"Deelname van {name} aan {camp_name}."
+    normalized_name = unidecode(name)
+    reference = _get_reference(normalized_name, camp_name, end_date)
+    description = f"Deelname van {normalized_name} aan {camp_name}."
     unit_amount = round(amount * 100 / quantity)
     return {
         "serviceId": settings.service_id,
