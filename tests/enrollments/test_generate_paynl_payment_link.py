@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import UTC, datetime
 from unittest.mock import MagicMock, patch
 
 import pytest
@@ -10,7 +10,7 @@ from traka_automation.enrollments.payment_connection.generate_paynl_payment_link
 )
 from traka_automation.settings import PayNlSettings
 
-END_DATE = datetime(2026, 7, 15, 12, 0, 0)
+END_DATE = datetime(2026, 7, 15, 12, 0, 0, tzinfo=UTC)
 
 
 @pytest.fixture
